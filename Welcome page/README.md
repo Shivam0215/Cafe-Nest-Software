@@ -1,1 +1,0 @@
-# Cafe Nest Software based on HTML, CSS, JAVA
