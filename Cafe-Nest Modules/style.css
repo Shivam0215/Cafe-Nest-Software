@@ -3,6 +3,44 @@
     padding: 0;
 }
 
+
+@media (max-width: 480px) {
+    .nav ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .nav ul li {
+        margin: 10px 0;
+    }
+    .hero h1 {
+        font-size: 1.5em !important;
+    }
+    .hero h2 {
+        font-size: 1.2em !important;
+    }
+    .hero p {
+        font-size: 1em !important;
+    }
+    .get-started {
+        width: 120px;
+        font-size: 18px !important;
+    }
+    .about-image {
+        width: 100% !important;
+    }
+    .header h1 {
+        font-size: 1.8em !important;
+    }
+    .header h3 {
+        font-size: 0.9em !important;
+        margin: 10px 20px;
+    }
+    .header img {
+        width: 200px !important;
+    }
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: black;
@@ -30,7 +68,7 @@ body {
 }
 
 .nav {
-    position: sticky;
+    position:sticky;
     top: 0;
     display: flex;
     height: 60px;
@@ -56,6 +94,14 @@ body {
     padding: 18px 12px;
     font-weight: 500;
     cursor: pointer;
+    text-decoration: none;
+}
+.nav li a{
+    color: white;
+    text-decoration: none;
+}
+.nav li a:hover{
+    color: gray;
 }
 
 .login-button {
@@ -77,9 +123,24 @@ body {
 }
 
 .hero {
-    height: 80vh;
+    /* height: 80vh; */
 }
-
+.get-started{
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    top: 15vh;
+    padding: 5px 8px;
+    font-size: 20px;
+    font-weight: 500;
+    width: 120px;
+    height: 50px;
+    border-radius: 6px;
+    background-color: rgb(8, 109, 41);
+    color: white;
+    text-decoration: none;
+}
 .content {
     display: flex;
     justify-content: center;
@@ -145,28 +206,31 @@ body {
 }
 
 .header {
-    height: 60vh;
-    background-color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 20px;
+    background-color: #000000;
 }
 
 .header h1 {
-    padding-top: 36px;
-    text-align: center;
-    font-size: 60px;
-    font-family: "Star Serif", serif;
-    color: rgb(4, 124, 54);
+    font-size: 2.5em;
+    color: #129033;
+}
+
+.header img {
+    max-width: 100%;
+    width: 300px;
+    height: auto;
+    margin: 20px 0;
+    border-radius: 10px;
 }
 
 .header h3 {
-    position: relative;
-    text-align: center;
-    top: 20px;
-    padding: 0px 30vw;
-    font-family: "Open Sans", sans-serif;
-    word-spacing: 2px;
-    line-height: 30px;
-    color: rgb(255, 255, 255);
+    font-size: 1.2em;
+    color: #ffffff;
+    line-height: 1.6;
+    margin: 10px 140px;
 }
+
 .seperation-footer{
     height: 0.1px;
     width: 80vw;

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico?v=2" type="image/x-icon">
     <title>Cafe Nest</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap');
@@ -13,14 +14,14 @@
 </head>
 
 <body>
-    <div class="main">
-        <div class="nav">
-            <img src="Assest/Cafe Nest.png" alt="">
+    <div class="main" id="home">
+        <div class="nav" >
+            <img src="Assest/Cafe Nest.png" alt="logo">
             <ul>
-                <li>Home</li>
-                <li>About</li>
+                <li><a href="#home" id="home-button">Home</a></li>
+                <li> <a href="#about" id="about-button">About</a></li>
                 <li>Contact</li>
-                <li>Dashboard</li>
+                <li><a href="dashboard.html" class="dashboard-button">Dashboard</a></li>
                 <a href="login.html" class="login-button">Login</a>
             </ul>
         </div>
@@ -31,28 +32,26 @@
             <p>Manage Your Cafe and Restaurant </p>
             <p>Hassle-Free with Cafe Nest</p>
             <div class="content">
-                <button class="gs-btn">Get Started<svg style="position: relative;
-                    top: 3px; " xmlns="http://www.w3.org/2000/svg" fill="none" role="img" viewBox="0 0 24 24"
-                        width="24" height="24" data-icon="ChevronRightStandard" aria-hidden="true">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M15.5859 12L8.29303 19.2928L9.70725 20.7071L17.7072 12.7071C17.8948 12.5195 18.0001 12.2652 18.0001 12C18.0001 11.7347 17.8948 11.4804 17.7072 11.2928L9.70724 3.29285L8.29303 4.70706L15.5859 12Z"
-                            fill="currentColor"></path>
-                    </svg>
-                </button>
+                <a href="get-started.html" class="get-started">Get Started</a>
             </div>
         </div>
     </div>
     <div class="sepration"></div>
-    <div class="header">
-        <h1>About !</h1>
-        <h3>Welcome to Cafe Nest, your all-in-one cafe management solution. Whether you're running a cafe shop
-            or a Restaurant, our intuitive platform helps you streamline daily operations, manage inventory, track
-            sales, schedule staff, and enhance customer experiences—all from one easy-to-use dashboard. Boost
-            efficiency, reduce costs, and focus on what matters most: serving great food and delighting your
-            customers. Let cafe Nest take care of the details while you brew success!</h3>
-    </div>
+    <section class="header" id="about">
+        <h1>About Us!</h1>
+        <img src="Assest/About us.webp" alt="About Us banner for Cafe Nest" class="about-image">
+        <h3>
+            Welcome to Cafe Nest, your all-in-one cafe management solution. Whether you're running a cafe or a restaurant, 
+            our intuitive platform helps you streamline daily operations, manage inventory, track sales, schedule staff, 
+            and enhance customer experiences—all from one easy-to-use dashboard.
+        </h3>
+        <h3>
+            Boost efficiency, reduce costs, and focus on what matters most: serving great food and delighting your customers. 
+            Let Cafe Nest take care of the details while you brew success!
+        </h3>
+    </section>
+    
     <div class="seperation-footer">
-
     </div>
     <footer>
         <small class="copyright__content">©2024, <a href="/" title="">Cafe Nest</a>. All Rights Reserved.</small>
@@ -65,5 +64,22 @@
         <p>Contact us</p>
         <p>Product</p>
     </footer>
+    <script>
+        document.getElementById('home-button').addEventListener('click', function(event) {
+            event.preventDefault(); 
+            document.getElementById('home').scrollIntoView({
+                behavior: 'smooth',   
+                behavior: 'smooth' 
+            });
+        });
+
+        document.getElementById('about-button').addEventListener('click', function(event) {
+        event.preventDefault(); 
+        document.getElementById('about').scrollIntoView({
+            behavior: 'smooth', 
+            block: 'start'      
+        });
+    });
+    </script>
 </body>
 </html>

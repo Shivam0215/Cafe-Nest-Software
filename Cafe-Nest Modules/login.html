@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <link rel="icon" href="favicon.ico">
+    <title>Login - Cafe Nest</title>
     <style>
        * {
     margin: 0;
@@ -19,9 +20,35 @@ body {
     justify-content: center;
     height: 100vh;
 }
+body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('Assest/bg.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        filter: blur(4px);
+        z-index: -2;
+    }
+
+    body::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.444);
+        z-index: -1;
+    }
 
 .login-container {
-    width: 300px;
+    width: 30vw;
+    height: auto;
     padding: 2rem;
     background-color: #ffffff;
     border-radius: 8px;
@@ -81,12 +108,18 @@ button:hover {
 .signup-link a:hover {
     text-decoration: underline;
 }
+.login-container img {
+    width: 213px;
+    height: 90px;
+    margin-bottom: 40px;
+}
  
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h2>Login</h2>
+        <img src="Assest/logo.png" alt="logo">
+        <!-- <h2>Login</h2> -->
         <form action="#" method="POST">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>
