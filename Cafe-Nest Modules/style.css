@@ -123,7 +123,7 @@ body {
 }
 
 .hero {
-    /* height: 80vh; */
+    height: 80vh;
 }
 .get-started{
     position: relative;
