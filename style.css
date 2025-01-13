@@ -47,7 +47,7 @@ body {
 }
 
 .main {
-    background-image: url(Assest/Untitled\ design.png);
+    background-image: url(assets/Untitled\ design.png);
     height: 100vh;
     width: 100%;
     background-repeat: no-repeat;
@@ -122,9 +122,6 @@ body {
     
 }
 
-.hero {
-    /* height: 80vh; */
-}
 .get-started{
     position: relative;
     justify-content: center;

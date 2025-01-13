@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Analysis</title>
+    <link rel="stylesheet" href="sales_analysis.css">
+    <script src="sales_analysis.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Sales Analysis</h1>
+        <!-- <a href="index.html">Back to Dashboard</a> -->
+         <img src="assets/sales.png" alt="">
+    </header>
+    <main>
+        <section id="salesSummary">
+            <h2>Summary</h2>
+            <p>Total Sales: $<span id="totalSales">0</span></p>
+            <p>Total Orders: <span id="totalOrders">0</span></p>
+        </section>
+        <section id="salesChart">
+            <h2>Sales Chart</h2>
+            <canvas id="salesCanvas"></canvas>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            background-color: #2c693c;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            overflow: auto;
+        }
+
+        .sidebar a {
+            padding: 20px;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar a:hover {
+            background-color: #3b7d48;
+        }
+
+        .sidebar i {
+            margin-right: 10px;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            flex-grow: 1;
+            background-color: #f4f4f4;
+            min-height: 100vh;
+        }
+
+        @media screen and (max-width: 600px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="#"><i class="fas fa-box"></i> Customer Orders</a>
+    <a href="#"><i class="fas fa-users"></i> Staff Management</a>
+    <a href="#"><i class="fas fa-table"></i> Table Management</a>
+    <a href="#"><i class="fas fa-utensils"></i> Menu Management</a>
+    <a href="#"><i class="fas fa-file-invoice-dollar"></i> Billing</a>
+    <a href="#"><i class="fas fa-chart-line"></i> Sales Analysis</a>
+</div>
+
+<div class="content">
+    <h1>Dashboard</h1>
+    <!-- Add your content here -->
+</div>
+
+</body>
+</html>

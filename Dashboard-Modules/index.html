@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="header-container">
+        <span class="left-section">
+            <img src="assets/logo.png" alt="Logo" class="logo">
+        </span>
+        <h1>CafeNest Dashboard</h1>
+        <span class="profile-icon" onclick="toggleProfilePopup()">
+            <i class="fas fa-user-circle fa-2x"></i>
+        </span>
+    </div>
+    
+    <header class="navbar">
+        
+        <!-- <div class="profile-icon" onclick="toggleProfilePopup()">
+            <span><img src="icon.jpg"></span>
+        </div>
+        <div class="profile-popup" id="profile-popup">
+            <div class="profile-setup">
+                <h2>Profile Setup</h2>
+                <div class="profile-info">
+                    <div class="logo-upload">
+                        <label for="logo">Upload Logo:</label>
+                        <input type="file" id="logo" name="logo">
+                    </div>
+                    <div class="company-name">
+                        <label for="company-name">Company Name:</label>
+                        <input type="text" id="company-name" name="company-name" placeholder="Enter company name">
+                    </div>
+                </div>
+                <button onclick="saveProfile()" class="save-btn">Save Changes</button>
+                <button onclick="toggleProfilePopup()" class="close-btn">Close</button>
+            </div>
+          </div> -->
+
+
+
+    <!-- <span class="left-section">
+    <img src="logo.jpg" alt="Logo" class="logo">
+    </span>
+    <div class="profile-icon" onclick="toggleProfilePopup()">
+        <i class="fas fa-user-circle fa-2x"></i>
+    </div> -->
+
+    <div class="dashboard">
+        <!-- <img src="logo.jpg" alt="Logo"> -->
+
+        
+        <!-- <div class="profile-icon" onclick="toggleProfilePopup()">
+            <i class="fas fa-user-circle fa-2x"></i>
+        </div> -->
+        
+        <nav>
+            <!-- <img src="logo.jpg" alt="Logo"> -->
+            <span class="menu-icon" onclick="toggleMenu()">☰</span>
+            <ul> 
+                <li><a href="empmgmt.html" ><i class="fas fa-users"></i>Employee Management</a></li>
+                <li><a href="menumgmt.html"><i class="fas fa-utensils"></i>Menu Management</a></li>
+                <li><a href="ordermgmt.html"><i class="fas fa-box"></i>Order Management</a></li>
+                <li><a href="tablemgmt.html"><i class="fas fa-table"></i>Table Management</a></li>
+                <li><a href="billing.html"><i class="fas fa-file-invoice-dollar"></i>Billing</a></li>
+                <li><a href="sales_analysis.html"><i class="fas fa-chart-line"></i>Sales Analysis</a></li>
+            </ul>
+        </nav>
+        
+    </header>
+    <div class="dashboard-sections">
+       
+        <div class="section">
+            <h2>Employee Management</h2>
+            <img src="assets/assign.gif" alt="employee">
+            <p>Manage your cafe's employees by adding, updating, and deleting employee records.</p>
+            <a href="empmgmt.html" class="button">Manage Employees</a>
+        </div>
+
+        <div class="section">
+            <h2>Menu Management</h2>
+            <img src="assets/menu.gif" alt="">
+        <p>Manage your cafe's menu by adding, updating, and removing menu items.</p>
+        <a href="menumgmt.html" class="button">Manage Menu</a>
+        
+        </div>
+        <div class="section">
+            <h2>Order Management</h2>
+            <img src="assets/order.gif" alt="">
+        <p>View and manage customer orders, update order statuses, and ensure smooth operations.</p>
+        <a href="ordermgmt.html" class="button">Manage Orders</a>
+        </div>
+        <div class="section">
+            <h2>Table Management</h2>
+            <img src="assets/table.gif" alt="">
+            <p>Organize and manage your restaurant tables</p>
+            <a href="tablemgmt.html" class="button">Manage Tables</a>
+            </div>
+        <div class="section">
+            <h2>Billing</h2>
+            <img src="assets/bill.gif" alt="">
+            <p>Generate and print bills for customer orders, ensuring accurate and quick billing.</p>
+            <a href="billing.html" class="button">Billing</a>
+        </div>
+        <div class="section">
+            <h2>Sales analysis</h2>
+            <img src="assets/analysis.gif" alt="">
+            <p>View Sales Trends and view</p>
+            <a href="sales_analysis.html" class="button">Analyse Sales</a>
+        </div>
+        
+ </div>
+
+
+
+
+
+        <script>
+            function toggleMenu() {
+                const nav = document.querySelector('nav');
+                nav.classList.toggle('active');
+            }
+        </script>
+
+
+    </div>
+
+    
+</body>
+</html>

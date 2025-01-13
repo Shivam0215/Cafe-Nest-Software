@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Management</title>
+    <link rel="stylesheet" href="menumgmt.css">
+    <script src="menumgmt.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Menu Management</h1>
+        <!-- <a href="index.html">Back to Dashboard</a> -->
+         <img src="assets/menu.png" alt="menu">
+    </header>
+    <main>
+        <form id="menuForm">
+            <input type="text" id="itemName" placeholder="Item Name" required>
+            <input type="text" id="category" placeholder="Category" required>
+            <input type="number" id="price" placeholder="Price" required>
+            <button type="submit">Add Item</button>
+        </form>
+        <ul id="menuList"></ul>
+    </main>
+</body>
+</html>

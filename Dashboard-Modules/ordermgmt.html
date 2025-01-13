@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management</title>
+    <link rel="stylesheet" href="ordermgmt.css">
+    <script src="ordermgmt.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Order Management</h1>
+        <!-- <a href="index.html">Back to Dashboard</a> -->
+         <img src="assets/task.png" alt="">
+    </header>
+    <main>
+        <form id="orderForm">
+            <input type="text" id="customerName" placeholder="Table No" required>
+            <input type="text" id="orderDetails" placeholder="Order Details" required>
+            <select id="orderStatus">
+                <option value="pending">Pending</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+            </select>
+            <button type="submit">Add Order</button>
+        </form>
+        <ul id="orderList"></ul>
+    </main>
+</body>
+</html>

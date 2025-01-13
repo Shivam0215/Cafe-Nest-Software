@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Management</title>
+    <link rel="stylesheet" href="tablemgmt.css">
+    <script src="tablemgmt.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Table Management</h1>
+        <!-- <a href="index.html">Back to Dashboard</a> -->
+         <img src="assets/chair.png" alt="">
+    </header>
+    <main>
+        <form id="tableForm">
+            <input type="number" id="tableNumber" placeholder="Table Number" required>
+            <input type="number" id="seatingCapacity" placeholder="Seating Capacity" required>
+            <button type="submit">Add Table</button>
+        </form>
+        <ul id="tableList"></ul>
+    </main>
+</body>
+</html>
