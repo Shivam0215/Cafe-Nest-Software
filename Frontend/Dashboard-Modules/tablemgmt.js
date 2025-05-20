@@ -1,32 +1,66 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('tableForm');
-    const tableList = document.getElementById('tableList');
+    const tableNumberInput = document.getElementById('tableNumber');
+    const seatingCapacityInput = document.getElementById('seatingCapacity');
+    const tableBody = document.getElementById('table-table-body');
+    let editingId = null;
 
-    form.addEventListener('submit', (e) => {
+    async function fetchTables() {
+        const res = await fetch("http://localhost:8080/api/tables");
+        const tables = await res.json();
+        tableBody.innerHTML = "";
+        tables.forEach(table => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${table.id}</td>
+                <td>${table.tableNumber}</td>
+                <td>${table.seatingCapacity}</td>
+                <td>
+                    <button class="edit-btn" data-id="${table.id}" data-number="${table.tableNumber}" data-capacity="${table.seatingCapacity}">Edit</button>
+                    <button class="delete-btn" data-id="${table.id}">Delete</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
-        const tableNumber = document.getElementById('tableNumber').value;
-        const seatingCapacity = document.getElementById('seatingCapacity').value;
+        const tableNumber = tableNumberInput.value;
+        const seatingCapacity = seatingCapacityInput.value;
 
-        if (tableNumber && seatingCapacity) {
-            const li = document.createElement('li');
-            li.innerHTML = `Table ${tableNumber} - Seats ${seatingCapacity} 
-                            <button onclick="deleteTable(this)">Delete</button>
-                            <button onclick="updateTable(this)">Update</button>`;
-            tableList.appendChild(li);
+        if (editingId) {
+            await fetch(`http://localhost:8080/api/tables/${editingId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tableNumber, seatingCapacity })
+            });
+            editingId = null;
+            form.querySelector("button[type='submit']").textContent = "Add Table";
+        } else {
+            await fetch("http://localhost:8080/api/tables", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tableNumber, seatingCapacity })
+            });
+        }
+        form.reset();
+        fetchTables();
+    });
 
-            form.reset();
+    tableBody.addEventListener("click", async function(e) {
+        const id = e.target.dataset.id;
+        if (e.target.classList.contains("delete-btn")) {
+            await fetch(`http://localhost:8080/api/tables/${id}`, { method: "DELETE" });
+            fetchTables();
+        }
+        if (e.target.classList.contains("edit-btn")) {
+            tableNumberInput.value = e.target.dataset.number;
+            seatingCapacityInput.value = e.target.dataset.capacity;
+            editingId = id;
+            form.querySelector("button[type='submit']").textContent = "Update Table";
         }
     });
+
+    fetchTables();
 });
-
-function deleteTable(button) {
-    button.parentElement.remove();
-}
-
-function updateTable(button) {
-    const newSeatingCapacity = prompt("Enter new seating capacity:");
-    if (newSeatingCapacity) {
-        button.parentElement.innerHTML = button.parentElement.innerHTML.replace(/Seats \d+/, `Seats ${newSeatingCapacity}`);
-    }
-}

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cafe & Restaurant Registration</title>
     <link rel="stylesheet" href="register.css">
+    <link rel="icon" href="favicon.ico">
 </head>
 <body>
     <div class="container">
@@ -40,23 +41,27 @@ document.getElementById("register-form").addEventListener("submit", async functi
     e.preventDefault();
 
     const firstName = document.getElementById("first-name").value.trim();
-const lastName = document.getElementById("last-name").value.trim();
-const email = document.getElementById("email").value.trim();
-const password = document.getElementById("password").value.trim();
-const cafeName = document.getElementById("cafe-name").value.trim();
+    const lastName = document.getElementById("last-name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const cafeName = document.getElementById("cafe-name").value.trim();
 
-const response = await fetch("http://localhost:8080/api/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ firstName, lastName, cafeName, email, password })
-});
+    // Combine first and last name for backend
+    const name = firstName + " " + lastName;
 
+    const response = await fetch("http://localhost:8080/api/users/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, cafeName })
+    });
 
     if (response.ok) {
         alert("Registration successful!");
+        this.reset();
         window.location.href = "login.html";
     } else {
-        alert("Registration failed. Please try again.");
+        const error = await response.text();
+        alert("Registration failed: " + error);
     }
 });
 </script>

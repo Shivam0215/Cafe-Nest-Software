@@ -15,5 +15,6 @@ public class Order {
 
     private String customerName;
     private String orderDetails;
+    private String orderStatus;
     private double totalAmount;
 }

@@ -10,8 +10,7 @@
 <body>
     <header>
         <h1>Table Management</h1>
-        <!-- <a href="index.html">Back to Dashboard</a> -->
-         <img src="assets/chair.png" alt="">
+        <img src="assets/chair.png" alt="">
     </header>
     <main>
         <form id="tableForm">
@@ -19,7 +18,17 @@
             <input type="number" id="seatingCapacity" placeholder="Seating Capacity" required>
             <button type="submit">Add Table</button>
         </form>
-        <ul id="tableList"></ul>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Table Number</th>
+                    <th>Seating Capacity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="table-table-body"></tbody>
+        </table>
     </main>
 </body>
 </html>

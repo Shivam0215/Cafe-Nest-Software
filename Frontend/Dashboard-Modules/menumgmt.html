@@ -10,41 +10,25 @@
 <body>
     <header>
         <h1>Menu Management</h1>
-        <!-- <a href="index.html">Back to Dashboard</a> -->
-         <img src="assets/menu.png" alt="menu">
+        <img src="assets/menu.png" alt="menu">
     </header>
     <main>
-        <form id="menuForm" id="menu-container" >
-            <input type="text" id="itemName" placeholder="Item Name" required>
-            <input type="text" id="category" placeholder="Category" required>
-            <input type="number" id="price" placeholder="Price" required>
+        <form id="add-menu-form">
+            <input id="item-name" type="text" required placeholder="Item Name">
+            <input id="item-price" type="number" required placeholder="Price">
             <button type="submit">Add Item</button>
         </form>
-        <ul id="menuList"></ul>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="menu-table-body"></tbody>
+        </table>
     </main>
-    <script>
-document.addEventListener("DOMContentLoaded", async function() {
-    const menuContainer = document.getElementById("menu-container");
-
-    try {
-        const response = await fetch("http://localhost:8080/api/menu");
-        const menuItems = await response.json();
-
-        menuItems.forEach(item => {
-            const itemDiv = document.createElement("div");
-            itemDiv.className = "menu-item";
-            itemDiv.innerHTML = `
-                <h3>${item.name}</h3>
-                <p>${item.description}</p>
-                <p>₹${item.price}</p>
-            `;
-            menuContainer.appendChild(itemDiv);
-        });
-    } catch (error) {
-        console.error("Error loading menu:", error);
-        menuContainer.innerHTML = "<p>Failed to load menu items.</p>";
-    }
-});
-</script>
 </body>
 </html>

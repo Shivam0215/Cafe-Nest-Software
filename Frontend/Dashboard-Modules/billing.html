@@ -10,55 +10,18 @@
 <body>
     <header>
         <h1>Billing</h1>
-        <!-- <a href="index.html">Back to Dashboard</a> -->
-         <img src="assets/transaction.png" alt="">
+        <img src="assets/transaction.png" alt="">
     </header>
     <main>
-        <form id="billingForm" id="order-form" >
-            <input type="text" id="customerName" placeholder="Table No" required>
-            <input type="text" id="orderDetails" placeholder="Order Details" required>
-            <input type="number" id="totalAmount" placeholder="Total Amount" required>
+        <form id="billingForm">
+            <select id="customerName" required>
+                <option value="">Select Table No</option>
+            </select>
+            <input type="text" id="orderDetails" placeholder="Order Details" required readonly>
+            <input type="number" id="totalAmount" placeholder="Total Amount" required readonly>
             <button type="submit">Generate Bill</button>
         </form>
         <div id="bills"></div>
     </main>
-    <script>
-document.getElementById("billingForm").addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    const customerName = document.getElementById("customerName").value.trim();
-    const orderDetails = document.getElementById("orderDetails").value.trim();
-    const totalAmount = parseFloat(document.getElementById("totalAmount").value.trim());
-
-    if (!customerName || !orderDetails || isNaN(totalAmount)) {
-        alert("Please fill in all fields correctly.");
-        return;
-    }
-
-    const orderData = {
-        customerName,
-        orderDetails,
-        totalAmount
-    };
-
-    try {
-        const response = await fetch("http://localhost:8080/api/order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(orderData)
-        });
-
-        if (response.ok) {
-            alert("Bill generated successfully!");
-            document.getElementById("billingForm").reset();
-        } else {
-            alert("Failed to generate bill.");
-        }
-    } catch (error) {
-        console.error("Error generating bill:", error);
-        alert("An error occurred while processing the bill.");
-    }
-});
-</script>
 </body>
 </html>

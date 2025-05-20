@@ -10,8 +10,7 @@
 <body>
     <header>
         <h1>Employee Management</h1>
-        <!-- <a href="index.html">Back to Dashboard</a> -->
-         <img src="assets/recruitment.png" alt="">
+        <img src="assets/recruitment.png" alt="">
     </header>
     <main>
         <form id="employeeForm">
@@ -20,7 +19,18 @@
             <input type="number" id="salary" placeholder="Salary" required>
             <button type="submit">Add Employee</button>
         </form>
-        <ul id="employeeList"></ul>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Salary</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="employee-table-body"></tbody>
+        </table>
     </main>
 </body>
 </html>

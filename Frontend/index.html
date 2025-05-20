@@ -21,7 +21,7 @@
                 <li><a href="#home" id="home-button">Home</a></li>
                 <li> <a href="#about" id="about-button">About</a></li>
                 <li>Contact</li>
-                <li><a href="Dashboard-Modules/index.html" class="dashboard-button">Dashboard</a></li>
+                <li><a href="Dashboard-Modules/index.html" id="dashboard-button" class="dashboard-button">Dashboard</a></li>
                 <a href="login.html" class="login-button">Login</a>
             </ul>
         </div>
@@ -80,6 +80,17 @@
             block: 'start'      
         });
     });
+    document.getElementById('dashboard-button').addEventListener('click', function(event) {
+    event.preventDefault();
+    // Check login status
+    if (localStorage.getItem("isLoggedIn") === "true") {
+        // Redirect to user dashboard
+        window.location.href = "Dashboard-Modules/index.html";
+    } else {
+        // Redirect to login page
+        window.location.href = "login.html";
+    }
+});
     </script>
 </body>
 </html>
