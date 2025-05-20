@@ -120,9 +120,9 @@ button:hover {
     <div class="login-container">
         <img src="assets/logo.png" alt="logo">
         <!-- <h2>Login</h2> -->
-        <form action="#" method="POST">
+        <form action="#" method="POST" id="login-form">
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="email" name="username" required>
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
@@ -132,5 +132,29 @@ button:hover {
             <p class="signup-link">Don't have an account? <a href="register.html">Sign up</a></p>
         </form>
     </div>
+    <script>
+document.getElementById("login-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    const response = await fetch("http://localhost:8080/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    });
+
+    if (response.ok) {
+        const result = await response.json();
+        alert("Login successful!");
+        localStorage.setItem("user", JSON.stringify(result)); // store login info
+        window.location.href = "dashboard.html"; // redirect
+    } else {
+        alert("Login failed. Check your credentials.");
+    }
+});
+</script>
+
 </body>
 </html>

@@ -14,7 +14,7 @@
          <img src="assets/menu.png" alt="menu">
     </header>
     <main>
-        <form id="menuForm">
+        <form id="menuForm" id="menu-container" >
             <input type="text" id="itemName" placeholder="Item Name" required>
             <input type="text" id="category" placeholder="Category" required>
             <input type="number" id="price" placeholder="Price" required>
@@ -22,5 +22,29 @@
         </form>
         <ul id="menuList"></ul>
     </main>
+    <script>
+document.addEventListener("DOMContentLoaded", async function() {
+    const menuContainer = document.getElementById("menu-container");
+
+    try {
+        const response = await fetch("http://localhost:8080/api/menu");
+        const menuItems = await response.json();
+
+        menuItems.forEach(item => {
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "menu-item";
+            itemDiv.innerHTML = `
+                <h3>${item.name}</h3>
+                <p>${item.description}</p>
+                <p>₹${item.price}</p>
+            `;
+            menuContainer.appendChild(itemDiv);
+        });
+    } catch (error) {
+        console.error("Error loading menu:", error);
+        menuContainer.innerHTML = "<p>Failed to load menu items.</p>";
+    }
+});
+</script>
 </body>
 </html>

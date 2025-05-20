@@ -13,12 +13,12 @@
 
         <div class="form-container">
             <h2>Register Your Cafe & Restaurant</h2>
-            <form action="#" method="POST">
+            <form action="#" method="POST" id="register-form">
                 <label for="first-name">First Name</label>
-                <input type="text" id="first-name" name="first-name" required>
+                <input type="text" id="first-name" id="name" name="first-name" required>
 
                 <label for="last-name">Last Name</label>
-                <input type="text" id="last-name" name="last-name" required>
+                <input type="text" id="last-name" id="name" name="last-name" required>
 
                 <label for="cafe-name">Cafe and Restaurant Name</label>
                 <input type="text" id="cafe-name" name="cafe-name" required>
@@ -35,5 +35,28 @@
             <p class="already-registered">Already registered? <a href="login.html">Login here</a></p>
         </div>
     </div>
+    <script>
+document.getElementById("register-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    const response = await fetch("http://localhost:8080/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password })
+    });
+
+    if (response.ok) {
+        alert("Registration successful!");
+        window.location.href = "login.html";
+    } else {
+        alert("Registration failed. Please try again.");
+    }
+});
+</script>
+
 </body>
 </html>
