@@ -52,6 +52,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Add this function to fetch and display bills
+    async function loadBills() {
+        const billsDiv = document.getElementById('bills');
+        billsDiv.innerHTML = '';
+        const res = await fetch("http://localhost:8080/api/bills");
+        const bills = await res.json();
+        if (bills.length === 0) {
+            billsDiv.innerHTML = "<p>No bills generated yet.</p>";
+            return;
+        }
+        bills.forEach(bill => {
+            const div = document.createElement('div');
+            div.className = 'bill';
+            div.innerHTML = `
+                <strong>Table No:</strong> ${bill.customerName}<br>
+                <strong>Order Details:</strong> ${bill.orderDetails}<br>
+                <strong>Total Amount:</strong> ₹${bill.totalAmount}<br>
+                <button onclick="printBill(this)">Print</button>
+                <button onclick="deleteBill(${bill.id})" style="background-color:#e74c3c;color:white;margin-left:10px;">Delete</button>
+            `;
+            billsDiv.appendChild(div);
+        });
+    }
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         const customerName = tableSelect.value;
@@ -95,9 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
         orderDetailsInput.value = '';
         totalAmountInput.value = '';
         delete form.dataset.orderId;
+        await loadBills(); // <-- Add this line to refresh the bill list
     });
 
     loadTables();
+    loadBills(); // <-- Load bills on page load
 });
 
 function printBill(button) {
@@ -108,4 +134,19 @@ function printBill(button) {
     document.body.innerHTML = billContent;
     window.print();
     document.body.innerHTML = originalContent;
+}
+
+async function deleteBill(id) {
+    if (!confirm("Are you sure you want to delete this bill?")) return;
+    const res = await fetch(`http://localhost:8080/api/bills/${id}`, {
+        method: "DELETE"
+    });
+    if (res.ok) {
+        alert("Bill deleted.");
+        loadBills();
+    } else {
+        const errorText = await res.text();
+        console.error("Delete error:", errorText);
+        alert("Error deleting bill. Please try again.\n" + errorText);
+    }
 }

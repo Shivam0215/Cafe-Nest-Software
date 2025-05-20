@@ -1,29 +1,40 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const response = await fetch("http://localhost:8080/api/sales");
-    const salesData = await response.json();
+    // Fetch bills instead of sales
+    const response = await fetch("http://localhost:8080/api/bills");
+    const bills = await response.json();
 
     const totalSalesElement = document.getElementById('totalSales');
     const totalOrdersElement = document.getElementById('totalOrders');
 
     // Calculate total sales and total orders
     let totalSales = 0;
-    salesData.forEach(data => {
-        totalSales += data.sales;
+    bills.forEach(bill => {
+        totalSales += bill.totalAmount;
     });
     totalSalesElement.innerText = totalSales;
-    totalOrdersElement.innerText = salesData.length;
+    totalOrdersElement.innerText = bills.length;
+
+    // Group bills by date
+    const grouped = {};
+    bills.forEach(bill => {
+        const date = bill.date || 'Unknown';
+        grouped[date] = (grouped[date] || 0) + bill.totalAmount;
+    });
+    const labels = Object.keys(grouped);
+    const salesData = Object.values(grouped);
 
     // Render sales chart using Chart.js
     const ctx = document.getElementById('salesCanvas').getContext('2d');
     new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
-            labels: salesData.map(d => d.date),
+            labels: labels,
             datasets: [{
                 label: 'Sales',
-                data: salesData.map(d => d.sales),
+                data: salesData,
+                backgroundColor: 'rgba(14, 97, 27, 0.7)',
                 borderColor: 'green',
-                fill: false
+                borderWidth: 1
             }]
         }
     });

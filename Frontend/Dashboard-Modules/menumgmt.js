@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch("http://localhost:8080/api/menu");
         const menuItems = await response.json();
         tableBody.innerHTML = "";
-        menuItems.forEach(item => {
+        menuItems.forEach((item, index) => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td>${item.id}</td>
+                <td>${index + 1}</td> <!-- Display row number, not item.id -->
                 <td>${item.name}</td>
                 <td>${item.price}</td>
                 <td>

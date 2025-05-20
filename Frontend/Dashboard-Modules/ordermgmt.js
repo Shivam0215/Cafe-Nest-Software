@@ -114,10 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const orders = await response.json();
         const tableBody = document.getElementById("order-table-body");
         tableBody.innerHTML = "";
-        orders.forEach(order => {
+        orders.forEach((order, index) => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td>${order.id}</td>
+                <td>${index + 1}</td> <!-- Serial number -->
                 <td>${order.customerName}</td>
                 <td>${order.orderDetails}</td>
                 <td>${order.orderStatus}</td>

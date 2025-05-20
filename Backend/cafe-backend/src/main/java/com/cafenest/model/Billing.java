@@ -1,6 +1,7 @@
 package com.cafenest.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 public class Billing {
@@ -11,6 +12,7 @@ public class Billing {
     private String customerName;
     private String orderDetails;
     private Double totalAmount;
+    private LocalDate date; // Add this line
 
     // Getters and setters
     public Long getId() { return id; }
@@ -21,4 +23,11 @@ public class Billing {
     public void setOrderDetails(String orderDetails) { this.orderDetails = orderDetails; }
     public Double getTotalAmount() { return totalAmount; }
     public void setTotalAmount(Double totalAmount) { this.totalAmount = totalAmount; }
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 }
