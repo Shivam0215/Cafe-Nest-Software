@@ -15,10 +15,10 @@
             <h2>Register Your Cafe & Restaurant</h2>
             <form action="#" method="POST" id="register-form">
                 <label for="first-name">First Name</label>
-                <input type="text" id="first-name" id="name" name="first-name" required>
+                <input type="text" id="first-name" name="first-name" required>
 
                 <label for="last-name">Last Name</label>
-                <input type="text" id="last-name" id="name" name="last-name" required>
+                <input type="text" id="last-name" name="last-name" required>
 
                 <label for="cafe-name">Cafe and Restaurant Name</label>
                 <input type="text" id="cafe-name" name="cafe-name" required>
@@ -39,15 +39,18 @@
 document.getElementById("register-form").addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
+    const firstName = document.getElementById("first-name").value.trim();
+const lastName = document.getElementById("last-name").value.trim();
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value.trim();
+const cafeName = document.getElementById("cafe-name").value.trim();
 
-    const response = await fetch("http://localhost:8080/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password })
-    });
+const response = await fetch("http://localhost:8080/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ firstName, lastName, cafeName, email, password })
+});
+
 
     if (response.ok) {
         alert("Registration successful!");
