@@ -149,7 +149,7 @@ document.getElementById("login-form").addEventListener("submit", async function(
         const result = await response.json();
         alert("Login successful!");
         localStorage.setItem("user", JSON.stringify(result)); // store login info
-        window.location.href = "Dashboard-Modules/index.html"; // redirect
+        window.location.replace("Dashboard-Modules/index.html"); // redirect
     } else {
         alert("Login failed. Incorrect email and password.");
     }

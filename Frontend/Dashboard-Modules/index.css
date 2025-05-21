@@ -163,87 +163,6 @@
             /* background-color: #f1f1f1; */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         } 
-          
-     
-
-
-
-         /* .profile-icon {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 24px;
-        }
-        
-        .profile-popup {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 300px;
-            height: 100%;
-            background-color: white;
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            padding: 20px;
-            z-index: 10;
-        }
-        
-        .profile-popup.visible {
-            transform: translateX(0);
-        }
-        
-        .profile-setup h2 {
-            color: #388e3c;
-            margin-bottom: 20px;
-        }
-        
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .logo-upload input,
-        .company-name input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        
-        .save-btn, .close-btn {
-            padding: 10px;
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-        }
-        
-        .save-btn:hover, .close-btn:hover {
-            background-color: #388e3c;
-
-        } 
-        /* .profile-icon img{
-            width:100px;
-        }
-
-
-        .profile-icon img:hover {
-            transform: scale(1.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        } */
-
-
-
         .header-container {
             display: flex;
             align-items: center;
@@ -331,3 +250,24 @@
         .signout-btn:hover {
             background: #ff7675;
         }
+        #cropper-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.7);
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+#cropper-modal[style*="display: flex"] {
+    display: flex !important;
+}
+#cropper-modal > div {
+    max-width: 700px !important;
+    max-height: 700px !important;
+}
+#cropper-image {
+    max-width: 600px !important;
+    max-height: 600px !important;
+}

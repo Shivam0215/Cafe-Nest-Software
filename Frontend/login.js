@@ -1,3 +1,7 @@
+if (localStorage.getItem("isLoggedIn") === "true" || localStorage.getItem("user")) {
+    window.location.replace("Dashboard-Modules/index.html");
+}
+
 document.getElementById("login-form").addEventListener("submit", async function(e) {
     e.preventDefault();
     const email = document.getElementById("email").value.trim();
@@ -18,6 +22,7 @@ document.getElementById("login-form").addEventListener("submit", async function(
         if (response.ok) {
             const user = await response.json();
             alert("Login successful!");
+            window.location.replace("Dashboard-Modules/index.html");
             // Save user info or redirect as needed
         } else {
             const errorData = await response.json();

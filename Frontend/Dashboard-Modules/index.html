@@ -6,6 +6,10 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="index.css">
+    <!-- Cropper.js CSS -->
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+<!-- Cropper.js JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 </head>
 <body>
     <div class="header-container">
@@ -14,7 +18,7 @@
         </span>
         <h1>CafeNest Dashboard</h1>
         <span class="profile-icon" onclick="toggleProfilePopup()" style="cursor:pointer;display:flex;align-items:center;justify-content:center;">
-            <img id="dashboard-profile-photo" src="assets/default-profile.png" alt="Profile" style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #0984e3;box-shadow:0 1px 4px rgba(0,0,0,0.08);background:#fff;">
+            <img id="dashboard-profile-photo" src="assets/default-profile.png" alt="Profile" style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #ffffff;box-shadow:0 1px 4px rgba(0,0,0,0.08);background:#fff;">
         </span>
     </div>
     <div class="profile-popup" id="profile-popup" style="display:none; position:fixed; top:70px; right:30px; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.2); z-index:1000; padding:20px; min-width:250px;">
@@ -23,7 +27,7 @@
             <div class="profile-info">
                 <div class="logo-upload" style="text-align:center;">
                     <label for="logo">Profile Photo:</label>
-                    <input type="file" id="logo" name="logo" accept="image/*" onchange="previewProfilePhoto(event)">
+                    <input type="file" id="logo" name="logo" accept="image/*" onchange="openCropper(event)">
                     <br>
                     <img id="profile-photo-preview" src="assets/default-profile.png" alt="Profile Photo" style="width:70px;height:70px;border-radius:50%;margin-top:10px;object-fit:cover;border:1px solid #ccc;">
                 </div>
@@ -37,6 +41,15 @@
             <button onclick="signOut()" class="signout-btn" style="width:100%;margin-top:12px;">Sign Out</button>
         </div>
     </div>
+    <!-- Cropper Modal -->
+<div id="cropper-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); align-items:center; justify-content:center; z-index:2000;">
+    <div style="background:#fff; padding:20px; border-radius:8px; max-width:700px; max-height:700px;">
+        <img id="cropper-image" style="max-width:600px; max-height:600px;">
+        <br>
+        <button onclick="cropImage()">Crop & Set</button>
+        <button onclick="closeCropper()">Cancel</button>
+    </div>
+</div>
     <header class="navbar">
 <div class="dashboard">
         
@@ -99,22 +112,14 @@
  <script>
             document.addEventListener('DOMContentLoaded', function() {
     const savedPhoto = localStorage.getItem('profilePhoto');
-    const preview = document.getElementById('profile-photo-preview');
-    if (savedPhoto && preview) {
-        preview.src = savedPhoto;
-    }
-
-    // Load company name from localStorage
-    const savedCompanyName = localStorage.getItem('companyName');
-    const companyNameInput = document.getElementById('company-name');
-    if (savedCompanyName && companyNameInput) {
-        companyNameInput.value = savedCompanyName;
-    }
-
-    // Set dashboard profile photo from localStorage if available
     const dashboardProfilePhoto = document.getElementById('dashboard-profile-photo');
-    if (savedPhoto && dashboardProfilePhoto) {
-        dashboardProfilePhoto.src = savedPhoto;
+    if (dashboardProfilePhoto) {
+        dashboardProfilePhoto.src = savedPhoto ? savedPhoto : 'assets/profile.png';
+    }
+    // Fix: Also set the profile setup preview image
+    const profilePhotoPreview = document.getElementById('profile-photo-preview');
+    if (profilePhotoPreview) {
+        profilePhotoPreview.src = savedPhoto ? savedPhoto : 'assets/profile.png';
     }
 });
             function toggleMenu() {
@@ -140,7 +145,7 @@
                 localStorage.removeItem('profilePhoto');
                 localStorage.removeItem('companyName');
                 // Redirect to login page
-                window.location.href = "../login.html";
+                window.location.replace("../login.html");
             }
             function previewProfilePhoto(event) {
                 const file = event.target.files[0];
@@ -154,10 +159,63 @@
                     };
                     reader.readAsDataURL(file);
                 } else {
-                    preview.src = "assets/default-profile.png";
+                    preview.src = "assets/profile.png";
                     localStorage.removeItem('profilePhoto');
                 }
             }
+            // Cropper.js related functions
+            let cropper;
+function openCropper(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const cropperModal = document.getElementById('cropper-modal');
+        const cropperImage = document.getElementById('cropper-image');
+        cropperImage.src = e.target.result;
+        cropperModal.style.display = 'flex';
+        // Destroy previous cropper if exists
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(cropperImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+            background: false,
+            movable: true,
+            zoomable: true,
+            rotatable: false,
+            scalable: false,
+            autoCropArea: 1,
+        });
+    };
+    reader.readAsDataURL(file);
+}
+
+function cropImage() {
+    if (cropper) {
+        const canvas = cropper.getCroppedCanvas({
+            width: 200,
+            height: 200,
+            imageSmoothingQuality: 'high'
+        });
+        const croppedDataUrl = canvas.toDataURL('image/png');
+        // Set preview and save to localStorage
+        document.getElementById('profile-photo-preview').src = croppedDataUrl;
+        localStorage.setItem('profilePhoto', croppedDataUrl);
+        // Also update dashboard header photo if present
+        const dashboardProfilePhoto = document.getElementById('dashboard-profile-photo');
+        if (dashboardProfilePhoto) dashboardProfilePhoto.src = croppedDataUrl;
+        closeCropper();
+    }
+}
+
+function closeCropper() {
+    document.getElementById('cropper-modal').style.display = 'none';
+    if (cropper) {
+        cropper.destroy();
+        cropper = null;
+    }
+}
+
             document.addEventListener('click', function(event) {
                 const popup = document.getElementById('profile-popup');
                 const icon = document.querySelector('.profile-icon');
