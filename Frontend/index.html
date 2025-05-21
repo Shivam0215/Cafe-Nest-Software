@@ -16,9 +16,10 @@
 
 <body>
     <div class="main" id="home">
-        <div class="nav" >
-            <img src="assets/Cafe Nest.png" alt="logo">
-            <ul>
+        <div class="nav">
+            <img src="assets/Cafe Nest.png" alt="logo" class="nav-logo">
+            <span class="menu-toggle" id="menu-toggle">&#9776;</span>
+            <ul id="nav-list">
                 <li><a href="#home" id="home-button">Home</a></li>
                 <li> <a href="#about" id="about-button">About</a></li>
                 <li><a href="#contact" id="contact-button">Contact</a></li>
@@ -111,6 +112,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+</script>
+<script>
+document.getElementById('menu-toggle').onclick = function() {
+  var navList = document.getElementById('nav-list');
+  navList.classList.toggle('show');
+};
 </script>
 </body>
 </html>

@@ -66,3 +66,24 @@ form button:hover {
     border-radius: 5px;
     cursor: pointer;
 }
+
+@media (max-width: 600px) {
+  form, .form-container {
+    width: 98vw !important;
+    min-width: unset !important;
+    padding: 0 2vw !important;
+  }
+  input, select, button {
+    font-size: 14px !important;
+    padding: 8px !important;
+  }
+  ul, li {
+    font-size: 14px !important;
+  }
+  table, .styled-table {
+    font-size: 12px;
+    width: 100vw;
+    overflow-x: auto;
+    display: block;
+  }
+}

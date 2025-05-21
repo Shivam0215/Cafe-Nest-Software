@@ -98,3 +98,23 @@ button.register-btn:hover {
 .already-registered a:hover {
     text-decoration: underline;
 }
+
+@media (max-width: 600px) {
+  .container {
+    width: 95vw;
+    padding: 10px;
+    min-width: unset;
+    top: 10px;
+  }
+  .container img {
+    width: 150px;
+    margin-left: 0;
+  }
+  h2 {
+    font-size: 20px;
+  }
+  input, button.register-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+}

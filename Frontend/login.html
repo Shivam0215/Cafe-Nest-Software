@@ -113,7 +113,18 @@ button:hover {
     height: 90px;
     margin-bottom: 40px;
 }
- 
+
+@media (max-width: 600px) {
+  .login-container {
+    width: 95vw;
+    padding: 1rem;
+  }
+  .login-container img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+}
     </style>
 </head>
 <body>
@@ -155,6 +166,5 @@ document.getElementById("login-form").addEventListener("submit", async function(
     }
 });
 </script>
-
 </body>
 </html>

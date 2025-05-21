@@ -53,3 +53,104 @@ form button:hover {
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
     position: relative;
 }
+
+/* Example for Dashboard-Modules/billing.css */
+@media (max-width: 600px) {
+  form, .form-container {
+    width: 98vw !important;
+    min-width: unset !important;
+    padding: 0 2vw !important;
+  }
+  input, select, button {
+    font-size: 14px !important;
+    padding: 8px !important;
+  }
+  ul, li {
+    font-size: 14px !important;
+  }
+  table.styled-table, .styled-table {
+    font-size: 12px;
+    width: 100vw;
+    overflow-x: auto;
+    display: block;
+  }
+  header img {
+    width: 60px;
+  }
+  .section, .dashboard-sections .section {
+    width: 98vw !important;
+    margin: 10px 0 !important;
+    padding: 10px !important;
+  }
+}
+
+/* Example: c:\Major Project\Cafe-Nest-Software\Frontend\Dashboard-Modules\index.css */
+
+@media (max-width: 900px) {
+  .dashboard {
+    width: 98vw;
+    padding: 0;
+  }
+  .dashboard-sections {
+    flex-direction: column;
+    padding: 5px;
+  }
+  .section {
+    width: 98vw !important;
+    margin: 10px 0 !important;
+    padding: 10px !important;
+  }
+  .header-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+  .header-container .logo {
+    max-width: 120px;
+    max-height: 40px;
+  }
+  .header-container h1 {
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    width: 100vw;
+    padding: 0;
+  }
+  .dashboard-sections {
+    flex-direction: column;
+    padding: 2px;
+  }
+  .section {
+    width: 99vw !important;
+    margin: 8px 0 !important;
+    padding: 6px !important;
+  }
+  .section img {
+    width: 50px;
+    height: auto;
+  }
+  .header-container {
+    flex-direction: column;
+    padding: 5px;
+  }
+  .header-container .logo {
+    max-width: 90px;
+    max-height: 30px;
+  }
+  .header-container h1 {
+    font-size: 1em;
+  }
+  table, .styled-table {
+    font-size: 12px;
+    width: 100vw;
+    overflow-x: auto;
+    display: block;
+  }
+  form {
+    width: 98vw;
+    min-width: unset;
+    padding: 0 2vw;
+  }
+}
