@@ -36,35 +36,6 @@
             <p class="already-registered">Already registered? <a href="login.html">Login here</a></p>
         </div>
     </div>
-    <script>
-document.getElementById("register-form").addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    const firstName = document.getElementById("first-name").value.trim();
-    const lastName = document.getElementById("last-name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const cafeName = document.getElementById("cafe-name").value.trim();
-
-    // Combine first and last name for backend
-    const name = firstName + " " + lastName;
-
-    const response = await fetch("http://localhost:8080/api/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, cafeName })
-    });
-
-    if (response.ok) {
-        alert("Registration successful!");
-        this.reset();
-        window.location.href = "login.html";
-    } else {
-        const error = await response.text();
-        alert("Registration failed: " + error);
-    }
-});
-</script>
-
+<script src="register.js"></script>
 </body>
 </html>

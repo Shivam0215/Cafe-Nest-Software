@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let editingId = null;
 
     async function fetchEmployees() {
-        const res = await fetch("http://localhost:8080/api/employees");
+        const res = await fetch("/api/employees");
         employees = await res.json();
         renderEmployees();
     }
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (editingId) {
             // Update employee
-            await fetch(`http://localhost:8080/api/employees/${editingId}`, {
+            await fetch(`/api/employees/${editingId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, position, salary })
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
             form.querySelector("button[type='submit']").textContent = "Add Employee";
         } else {
             // Add employee
-            await fetch("http://localhost:8080/api/employees", {
+            await fetch("/api/employees", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, position, salary })
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
     tableBody.addEventListener("click", async function (e) {
         const id = e.target.dataset.id;
         if (e.target.classList.contains("delete-btn")) {
-            await fetch(`http://localhost:8080/api/employees/${id}`, { method: "DELETE" });
+            await fetch(`/api/employees/${id}`, { method: "DELETE" });
             fetchEmployees();
         }
         if (e.target.classList.contains("edit-btn")) {

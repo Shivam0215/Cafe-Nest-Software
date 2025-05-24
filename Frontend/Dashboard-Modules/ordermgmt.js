@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch table numbers
     async function loadTables() {
-        const response = await fetch("http://localhost:8080/api/tables");
+        const response = await fetch("/api/tables");
         const tables = await response.json();
         tableSelect.innerHTML = '<option value="">Select Table No</option>';
         tables.forEach(table => {
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch menu items
     async function loadMenuItems() {
-        const response = await fetch("http://localhost:8080/api/menu");
+        const response = await fetch("/api/menu");
         menuItems = await response.json();
         orderItemsSelect.innerHTML = "";
         menuItems.forEach(item => {
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (editingOrderId) {
             // Update existing order
-            await fetch(`http://localhost:8080/api/orders/${editingOrderId}`, {
+            await fetch(`/api/orders/${editingOrderId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             form.querySelector("button[type='submit']").textContent = "Add Order";
         } else {
             // Check for existing order for this table (not completed)
-            const ordersRes = await fetch("http://localhost:8080/api/orders");
+            const ordersRes = await fetch("/api/orders");
             const orders = await ordersRes.json();
             const existingOrder = orders.find(order => order.customerName == customerName && order.orderStatus.toLowerCase() !== "completed");
 
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     : orderDetails;
                 const updatedTotal = Number(existingOrder.totalAmount) + totalAmount;
 
-                await fetch(`http://localhost:8080/api/orders/${existingOrder.id}`, {
+                await fetch(`/api/orders/${existingOrder.id}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             } else {
                 // Add new order
-                await fetch("http://localhost:8080/api/orders", {
+                await fetch("/api/orders", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load orders as before
     async function loadOrders() {
-        const response = await fetch("http://localhost:8080/api/orders");
+        const response = await fetch("/api/orders");
         const orders = await response.json();
         const tableBody = document.getElementById("order-table-body");
         tableBody.innerHTML = "";
@@ -135,13 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = e.target.dataset.id;
         if (e.target.classList.contains("delete-order-btn")) {
             if (confirm("Are you sure you want to delete this order?")) {
-                await fetch(`http://localhost:8080/api/orders/${id}`, { method: "DELETE" });
+                await fetch(`/api/orders/${id}`, { method: "DELETE" });
                 loadOrders();
             }
         }
         if (e.target.classList.contains("edit-order-btn")) {
             // Fetch order details and fill the form for editing
-            const response = await fetch(`http://localhost:8080/api/orders/${id}`);
+            const response = await fetch(`/api/orders/${id}`);
             if (response.ok) {
                 const order = await response.json();
                 document.getElementById('customer-name').value = order.customerName;

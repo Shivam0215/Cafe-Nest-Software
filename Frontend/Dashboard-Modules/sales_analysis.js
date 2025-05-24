@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     // Fetch bills instead of sales
-    const response = await fetch("http://localhost:8080/api/bills");
+    const response = await fetch("/api/sales");
     const bills = await response.json();
 
     const totalSalesElement = document.getElementById('totalSales');

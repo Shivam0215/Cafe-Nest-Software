@@ -7,21 +7,19 @@ document.getElementById("register-form").addEventListener("submit", async functi
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    const response = await fetch("http://localhost:8080/api/users/register", {
+    fetch("/api/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, cafeName, email, password })
-    });
-
-    if (response.ok) {
-        alert("Registration successful!");
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle success, e.g. redirect or show message
+        console.log(data);
         window.location.href = "login.html";
-    } else {
-        const error = await response.text();
-        if (error.includes("Email already exists")) {
-            alert("This email is already registered. Please use a different email.");
-        } else {
-            alert("Registration failed: " + error);
-        }
-    }
+    })
+    .catch(error => {
+        // Handle error
+        alert("Registration failed!");
+    });
 });

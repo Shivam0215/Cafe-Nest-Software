@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let editingId = null;
 
     async function loadMenuItems() {
-        const response = await fetch("http://localhost:8080/api/menu");
+        const response = await fetch("/api/menu");
         const menuItems = await response.json();
         tableBody.innerHTML = "";
         menuItems.forEach((item, index) => {
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const price = priceInput.value.trim();
 
         if (editingId) {
-            await fetch(`http://localhost:8080/api/menu/${editingId}`, {
+            await fetch(`/api/menu/${editingId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, price })
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             editingId = null;
             form.querySelector("button[type='submit']").textContent = "Add Item";
         } else {
-            await fetch("http://localhost:8080/api/menu", {
+            await fetch("/api/menu", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, price })
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tableBody.addEventListener("click", async function(e) {
         const id = e.target.dataset.id;
         if (e.target.classList.contains("delete-btn")) {
-            await fetch(`http://localhost:8080/api/menu/${id}`, { method: "DELETE" });
+            await fetch(`/api/menu/${id}`, { method: "DELETE" });
             loadMenuItems();
         }
         if (e.target.classList.contains("edit-btn")) {
