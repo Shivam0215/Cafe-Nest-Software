@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.ResponseEntity;
 
-// Add this class if it does not exist elsewhere
-
-
-// @CrossOrigin(origins = "http://127.0.0.1:3000")
+@CrossOrigin(origins = {"https://cafenest.shop", "https://www.cafenest.shop"})
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -39,3 +36,4 @@ public class UserController {
         return ResponseEntity.status(401).body("Invalid credentials");
     }
 }
+
