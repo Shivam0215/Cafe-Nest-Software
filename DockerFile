@@ -1,0 +1,17 @@
+# Use a base image with Java 17 (or 21, if needed)
+FROM eclipse-temurin:17-jdk
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the JAR file into the image
+COPY target/*.jar app.jar
+
+# Expose the port Render will use
+EXPOSE 8080
+
+# Set environment variable
+ENV PORT=8080
+
+# Run the jar file
+ENTRYPOINT ["java", "-jar", "app.jar"]
