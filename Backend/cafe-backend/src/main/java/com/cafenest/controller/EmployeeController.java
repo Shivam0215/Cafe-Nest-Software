@@ -11,7 +11,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/employees")
-@CrossOrigin(origins = "http://localhost:5500") // Change port if needed for your frontend
+@CrossOrigin(origins = {
+    "https://cafenest.shop",
+    "https://www.cafenest.shop",
+    "https://cafenest.onrender.com",
+    "http://localhost:3000",
+    "http://localhost:5500"
+})
 public class EmployeeController {
 
     @Autowired

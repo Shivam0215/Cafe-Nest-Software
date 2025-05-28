@@ -10,6 +10,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tables")
+@CrossOrigin(origins = {
+    "https://cafenest.shop",
+    "https://www.cafenest.shop",
+    "https://cafenest.onrender.com",
+    "http://localhost:3000",
+    "http://localhost:5500"
+})
 public class TableController {
     @Autowired
     private TableRepository repo;

@@ -9,6 +9,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
+@CrossOrigin(origins = {
+    "https://cafenest.shop",
+    "https://www.cafenest.shop",
+    "https://cafenest.onrender.com",
+    "http://localhost:3000",
+    "http://localhost:5500"
+})
 public class OrderController {
     @Autowired
     private OrderRepository orderRepository;

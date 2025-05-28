@@ -42,7 +42,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     @Bean
 public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList(
+    configuration.setAllowedOriginPatterns(Arrays.asList(
     "https://cafenest.shop", 
     "https://www.cafenest.shop",
     "https://cafenest.onrender.com", 

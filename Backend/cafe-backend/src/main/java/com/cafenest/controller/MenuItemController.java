@@ -9,6 +9,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/menu")
+@CrossOrigin(origins = {
+    "https://cafenest.shop",
+    "https://www.cafenest.shop",
+    "https://cafenest.onrender.com",
+    "http://localhost:3000",
+    "http://localhost:5500"
+})
 public class MenuItemController {
     @Autowired
     private MenuItemRepository menuItemRepository;
