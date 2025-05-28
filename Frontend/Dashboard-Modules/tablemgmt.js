@@ -1,3 +1,6 @@
+const BASE_URL = location.hostname.includes("localhost")
+    ? "http://localhost:8080"
+    : "https://cafenest.onrender.com";
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('tableForm');
     const tableNumberInput = document.getElementById('tableNumber');
@@ -6,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let editingId = null;
 
     async function fetchTables() {
-        const res = await fetch("/api/tables");
+        const res = await fetch(`${BASE_URL}/api/tables`);
         const tables = await res.json();
         tableBody.innerHTML = "";
         tables.forEach(table => {
@@ -30,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const seatingCapacity = seatingCapacityInput.value;
 
         if (editingId) {
-            await fetch(`/api/tables/${editingId}`, {
+            await fetch(`${BASE_URL}/api/tables/${editingId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ tableNumber, seatingCapacity })
@@ -38,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             editingId = null;
             form.querySelector("button[type='submit']").textContent = "Add Table";
         } else {
-            await fetch("/api/tables", {
+            await fetch(`${BASE_URL}/api/tables`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ tableNumber, seatingCapacity })
@@ -51,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tableBody.addEventListener("click", async function(e) {
         const id = e.target.dataset.id;
         if (e.target.classList.contains("delete-btn")) {
-            await fetch(`/api/tables/${id}`, { method: "DELETE" });
+            await fetch(`${BASE_URL}/api/tables/${id}`, { method: "DELETE" });
             fetchTables();
         }
         if (e.target.classList.contains("edit-btn")) {
