@@ -1,6 +1,9 @@
+const BASE_URL = location.hostname.includes("localhost")
+    ? "http://localhost:8080"
+    : "https://cafenest.onrender.com";
 document.addEventListener('DOMContentLoaded', async () => {
     // Fetch bills instead of sales
-    const response = await fetch("/api/sales");
+    const response = await fetch(`${BASE_URL}/api/sales`);
     const bills = await response.json();
 
     const totalSalesElement = document.getElementById('totalSales');

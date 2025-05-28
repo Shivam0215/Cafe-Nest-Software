@@ -27,6 +27,16 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers("/api/users/register", "/api/users/login").permitAll()
             .requestMatchers("/api/admin/**").hasRole("ADMIN")
+             .requestMatchers(
+        "/api/users/register", 
+        "/api/users/login",
+        "/api/employees/**", 
+        "/api/menu/**",
+        "/api/orders/**",
+        "/api/tables/**",
+        "/api/bills/**",
+        "/api/sales/**"
+    ).permitAll()
             .anyRequest().authenticated())
         .formLogin(login -> login.disable())
         .exceptionHandling(exception -> exception

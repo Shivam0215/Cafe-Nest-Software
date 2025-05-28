@@ -1,3 +1,6 @@
+const BASE_URL = location.hostname.includes("localhost")
+    ? "http://localhost:8080"
+    : "https://cafenest.onrender.com";
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById("add-menu-form");
     const nameInput = document.getElementById("item-name");
@@ -6,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let editingId = null;
 
     async function loadMenuItems() {
-        const response = await fetch("/api/menu");
+        const response = await fetch(`${BASE_URL}/api/menu`);
         const menuItems = await response.json();
         tableBody.innerHTML = "";
         menuItems.forEach((item, index) => {
@@ -30,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const price = priceInput.value.trim();
 
         if (editingId) {
-            await fetch(`/api/menu/${editingId}`, {
+            await fetch(`${BASE_URL}/api/menu/${editingId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, price })
@@ -38,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             editingId = null;
             form.querySelector("button[type='submit']").textContent = "Add Item";
         } else {
-            await fetch("/api/menu", {
+            await fetch(`${BASE_URL}/api/menu`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, price })
@@ -51,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tableBody.addEventListener("click", async function(e) {
         const id = e.target.dataset.id;
         if (e.target.classList.contains("delete-btn")) {
-            await fetch(`/api/menu/${id}`, { method: "DELETE" });
+            await fetch(`${BASE_URL}/api/menu/${id}`, { method: "DELETE" });
             loadMenuItems();
         }
         if (e.target.classList.contains("edit-btn")) {

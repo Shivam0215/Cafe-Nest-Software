@@ -1,3 +1,6 @@
+const BASE_URL = location.hostname.includes("localhost")
+    ? "http://localhost:8080"
+    : "https://cafenest.onrender.com";
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('add-order-form');
     const tableSelect = document.getElementById('customer-name');
@@ -7,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch table numbers
     async function loadTables() {
-        const response = await fetch("/api/tables");
+        const response = await fetch(`${BASE_URL}/api/tables`);
         const tables = await response.json();
         tableSelect.innerHTML = '<option value="">Select Table No</option>';
         tables.forEach(table => {
@@ -20,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch menu items
     async function loadMenuItems() {
-        const response = await fetch("/api/menu");
+        const response = await fetch(`${BASE_URL}/api/menu`);
         menuItems = await response.json();
         orderItemsSelect.innerHTML = "";
         menuItems.forEach(item => {
@@ -53,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (editingOrderId) {
             // Update existing order
-            await fetch(`/api/orders/${editingOrderId}`, {
+            await fetch(`${BASE_URL}/api/orders/${editingOrderId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -67,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             form.querySelector("button[type='submit']").textContent = "Add Order";
         } else {
             // Check for existing order for this table (not completed)
-            const ordersRes = await fetch("/api/orders");
+            const ordersRes = await fetch(`${BASE_URL}/api/orders`);
             const orders = await ordersRes.json();
             const existingOrder = orders.find(order => order.customerName == customerName && order.orderStatus.toLowerCase() !== "completed");
 
@@ -78,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     : orderDetails;
                 const updatedTotal = Number(existingOrder.totalAmount) + totalAmount;
 
-                await fetch(`/api/orders/${existingOrder.id}`, {
+                await fetch(`${BASE_URL}/api/orders/${existingOrder.id}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -90,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             } else {
                 // Add new order
-                await fetch("/api/orders", {
+                await fetch(`${BASE_URL}/api/orders`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -110,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load orders as before
     async function loadOrders() {
-        const response = await fetch("/api/orders");
+        const response = await fetch(`${BASE_URL}/api/orders`);
         const orders = await response.json();
         const tableBody = document.getElementById("order-table-body");
         tableBody.innerHTML = "";
@@ -141,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (e.target.classList.contains("edit-order-btn")) {
             // Fetch order details and fill the form for editing
-            const response = await fetch(`/api/orders/${id}`);
+            const response = await fetch(`${BASE_URL}/api/orders/${id}`);
             if (response.ok) {
                 const order = await response.json();
                 document.getElementById('customer-name').value = order.customerName;

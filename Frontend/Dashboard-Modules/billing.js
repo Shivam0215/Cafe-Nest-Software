@@ -1,3 +1,6 @@
+const BASE_URL = location.hostname.includes("localhost")
+    ? "http://localhost:8080"
+    : "https://cafenest.onrender.com";
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('billingForm');
     const tableSelect = document.getElementById('customerName');
@@ -6,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load table numbers
     async function loadTables() {
-        const res = await fetch("/api/tables");
+        const res = await fetch(`${BASE_URL}/api/tables`);
         const tables = await res.json();
         tableSelect.innerHTML = '<option value="">Select Table No</option>';
         tables.forEach(table => {
@@ -25,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             totalAmountInput.value = '';
             return;
         }
-        const res = await fetch("/api/orders");
+        const res = await fetch(`${BASE_URL}/api/orders`);
         const orders = await res.json();
         console.log("Orders:", orders, "Selected table:", tableNo);
         orders.forEach(o => {
@@ -56,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadBills() {
         const billsDiv = document.getElementById('bills');
         billsDiv.innerHTML = '';
-        const res = await fetch("/api/bills");
+        const res = await fetch(`${BASE_URL}/api/bills`);
         const bills = await res.json();
         if (bills.length === 0) {
             billsDiv.innerHTML = "<p>No bills generated yet.</p>";
@@ -89,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Save the bill
-        const billRes = await fetch("/api/bills", {
+        const billRes = await fetch(`${BASE_URL}/api/bills`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ customerName, orderDetails, totalAmount })
@@ -102,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Mark the order as completed
         if (orderId) {
-            await fetch(`/api/orders/${orderId}`, {
+            await fetch(`${BASE_URL}/api/orders/${orderId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -138,7 +141,7 @@ function printBill(button) {
 
 async function deleteBill(id) {
     if (!confirm("Are you sure you want to delete this bill?")) return;
-    const res = await fetch(`/api/bills/${id}`, {
+    const res = await fetch(`${BASE_URL}/api/bills/${id}`, {
         method: "DELETE"
     });
     if (res.ok) {
