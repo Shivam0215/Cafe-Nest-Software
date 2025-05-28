@@ -19,6 +19,7 @@ document.getElementById("register-form").addEventListener("submit", async functi
         const response = await fetch(apiUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+              credentials: "include", 
             body: JSON.stringify({ name, cafeName, email, password })
         });
 
