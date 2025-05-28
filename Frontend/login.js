@@ -2,8 +2,11 @@ if (localStorage.getItem("isLoggedIn") === "true" || localStorage.getItem("user"
     window.location.replace("Dashboard-Modules/index.html");
 }
 
+const loginUrl = "https://www.cafenest.shop/api/users/login";
+
 document.getElementById("login-form").addEventListener("submit", async function(e) {
     e.preventDefault();
+
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
@@ -12,8 +15,11 @@ document.getElementById("login-form").addEventListener("submit", async function(
         return;
     }
 
+    const submitBtn = this.querySelector("button[type=submit]");
+    submitBtn.disabled = true;
+
     try {
-        const response = await fetch("/api/users/login", {
+        const response = await fetch(loginUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password })
@@ -22,15 +28,22 @@ document.getElementById("login-form").addEventListener("submit", async function(
         if (response.ok) {
             const user = await response.json();
             alert("Login successful!");
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("user", JSON.stringify({
+                id: user.id,
+                name: user.name,
+                email: user.email
+            }));
             window.location.replace("Dashboard-Modules/index.html");
-            // Save user info or redirect as needed
         } else {
-            const errorData = await response.json();
-            alert("Login failed: " + (errorData.message || "Check your credentials."));
-            console.error("Login failed:", errorData);
+            const errorText = await response.text();
+            alert("Login failed: " + errorText);
+            console.error("Login failed:", errorText);
         }
     } catch (err) {
         alert("An error occurred during login.");
         console.error("Network or server error:", err);
+    } finally {
+        submitBtn.disabled = false;
     }
 });
