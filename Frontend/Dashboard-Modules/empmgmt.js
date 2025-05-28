@@ -1,3 +1,6 @@
+const BASE_URL = location.hostname.includes("localhost")
+    ? "http://localhost:8080"
+    : "https://cafenest.onrender.com";
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("employeeForm");
     const tableBody = document.getElementById("employee-table-body");
@@ -5,10 +8,19 @@ document.addEventListener("DOMContentLoaded", function () {
     let editingId = null;
 
     async function fetchEmployees() {
-        const res = await fetch("/api/employees");
+    try {
+        const res = await fetch(`${BASE_URL}/api/employees`);
+        if (!res.ok) {
+            const errorText = await res.text();
+            throw new Error(`Error: ${res.status} - ${errorText}`);
+        }
         employees = await res.json();
         renderEmployees();
+    } catch (err) {
+        console.error("Failed to fetch employees:", err.message);
+        alert("Could not load employee data. Check console for details.");
     }
+}
 
     function renderEmployees() {
         tableBody.innerHTML = "";
@@ -36,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (editingId) {
             // Update employee
-            await fetch(`/api/employees/${editingId}`, {
+            await fetch(`${BASE_URL}/api/employees/${editingId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, position, salary })
@@ -45,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
             form.querySelector("button[type='submit']").textContent = "Add Employee";
         } else {
             // Add employee
-            await fetch("/api/employees", {
+            await fetch(`${BASE_URL}/api/employees`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, position, salary })
@@ -59,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
     tableBody.addEventListener("click", async function (e) {
         const id = e.target.dataset.id;
         if (e.target.classList.contains("delete-btn")) {
-            await fetch(`/api/employees/${id}`, { method: "DELETE" });
+            await fetch(`${BASE_URL}/api/employees/${id}`, { method: "DELETE" });
             fetchEmployees();
         }
         if (e.target.classList.contains("edit-btn")) {
