@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.ResponseEntity;
 
-@CrossOrigin(origins = {"https://cafenest.shop", "https://www.cafenest.shop"})
+@CrossOrigin(origins = {"https://cafenest.shop", "https://www.cafenest.shop",  "https://cafenest.onrender.com"})
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
