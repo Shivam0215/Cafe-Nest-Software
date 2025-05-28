@@ -1,4 +1,4 @@
-const apiUrl = "https://www.cafenest.shop/api/users/register";
+const apiUrl = "https://cafenest.onrender.com//api/users/register";
 
 document.getElementById("register-form").addEventListener("submit", async function(e) {
     e.preventDefault();

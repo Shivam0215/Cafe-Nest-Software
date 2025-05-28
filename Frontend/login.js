@@ -2,7 +2,7 @@ if (localStorage.getItem("isLoggedIn") === "true" || localStorage.getItem("user"
     window.location.replace("Dashboard-Modules/index.html");
 }
 
-const loginUrl = "https://www.cafenest.shop/api/users/login";
+const loginUrl = "https://cafenest.onrender.com//api/users/login";
 
 document.getElementById("login-form").addEventListener("submit", async function(e) {
     e.preventDefault();
