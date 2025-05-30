@@ -114,8 +114,8 @@
     <script>
         // Redirect to login if not authenticated
         if (!localStorage.getItem('token') || !localStorage.getItem('user')) {
-        window.location.replace("../login.html");
-        }
+    window.location.replace("../login.html");
+}
         document.addEventListener('DOMContentLoaded', function() {
             const user = JSON.parse(localStorage.getItem('user'));
     if (!user) return;
@@ -176,7 +176,7 @@ fetch(`https://cafenest.onrender.com/api/profile/${user.id}`, {
         }
         return res.json();
     })
-    .then(data => {
+    .then((data) => {
         showToast('Profile saved!');
         toggleProfilePopup();
     })
