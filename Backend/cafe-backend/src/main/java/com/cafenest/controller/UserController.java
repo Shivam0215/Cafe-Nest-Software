@@ -36,20 +36,25 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        User user = userRepository.findByEmail(loginRequest.getEmail());
-        if (user != null && passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            String token = jwtUtil.generateToken(user.getEmail());
-            Map<String, Object> response = new HashMap<>();
-            response.put("token", token);
-            // Only send safe user info (no password)
-            Map<String, Object> userInfo = new HashMap<>();
-            userInfo.put("id", user.getId());
-            userInfo.put("name", user.getName());
-            userInfo.put("email", user.getEmail());
-            response.put("user", userInfo);
-            return ResponseEntity.ok(response);
+        try {
+            User user = userRepository.findByEmail(loginRequest.getEmail());
+            if (user != null && passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+                String token = jwtUtil.generateToken(user.getEmail());
+                Map<String, Object> response = new HashMap<>();
+                response.put("token", token);
+                // Only send safe user info (no password)
+                Map<String, Object> userInfo = new HashMap<>();
+                userInfo.put("id", user.getId());
+                userInfo.put("name", user.getName());
+                userInfo.put("email", user.getEmail());
+                response.put("user", userInfo);
+                return ResponseEntity.ok(response);
+            }
+            return ResponseEntity.status(401).body("Invalid credentials");
+        } catch (Exception e) {
+            e.printStackTrace(); // This will print the error to logs
+            return ResponseEntity.status(500).body("An error occurred. Please try again later.");
         }
-        return ResponseEntity.status(401).body("Invalid credentials");
     }
 }
 
