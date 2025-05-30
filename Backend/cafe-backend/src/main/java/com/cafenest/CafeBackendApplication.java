@@ -14,7 +14,12 @@ public class CafeBackendApplication {
     }
 
     @Bean
-    public FilterRegistrationBean<JwtFilter> jwtFilter(JwtFilter filter) {
+    public JwtFilter jwtFilter() {
+        return new JwtFilter();
+    }
+
+    @Bean
+    public FilterRegistrationBean<JwtFilter> jwtFilterRegistration(JwtFilter filter) {
         FilterRegistrationBean<JwtFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(filter);
         registrationBean.addUrlPatterns("/api/*"); // Protect all /api endpoints
