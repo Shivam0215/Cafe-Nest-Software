@@ -11,7 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch table numbers
     async function loadTables() {
-        const response = await fetch(`${BASE_URL}/api/tables`);
+        const token = localStorage.getItem("token");
+        const response = await fetch(`${BASE_URL}/api/tables`, {
+            headers: { "Authorization": "Bearer " + token }
+        });
         const tables = await response.json();
         tableSelect.innerHTML = '<option value="">Select Table No</option>';
         tables.forEach(table => {
