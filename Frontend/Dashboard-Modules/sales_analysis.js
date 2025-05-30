@@ -5,7 +5,7 @@ const BASE_URL = location.hostname.includes("localhost")
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem("token");
     // Fetch sales data (bills)
-    const response = await fetch(`${BASE_URL}/api/sales`, {
+    const response = await fetch(`${BASE_URL}/api/bills`, {
         headers: { "Authorization": "Bearer " + token }
     });
     const bills = await response.json();
