@@ -1,6 +1,7 @@
 const BASE_URL = location.hostname.includes("localhost")
     ? "http://localhost:8080"
     : "https://cafenest.onrender.com";
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('add-order-form');
     const tableSelect = document.getElementById('customer-name');
@@ -21,9 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Fetch menu items
+    // Fetch menu items (add JWT if /api/menu is protected)
     async function loadMenuItems() {
-        const response = await fetch(`${BASE_URL}/api/menu`);
+        const token = localStorage.getItem("token");
+        const response = await fetch(`${BASE_URL}/api/menu`, {
+            headers: { "Authorization": "Bearer " + token }
+        });
         menuItems = await response.json();
         orderItemsSelect.innerHTML = "";
         menuItems.forEach(item => {
@@ -53,12 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalAmount = parseFloat(orderTotalInput.value);
 
         const editingOrderId = form.dataset.editingOrderId;
+        const token = localStorage.getItem("token");
 
         if (editingOrderId) {
             // Update existing order
             await fetch(`${BASE_URL}/api/orders/${editingOrderId}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
                 body: JSON.stringify({
                     customerName,
                     orderDetails,
@@ -70,7 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
             form.querySelector("button[type='submit']").textContent = "Add Order";
         } else {
             // Check for existing order for this table (not completed)
-            const ordersRes = await fetch(`${BASE_URL}/api/orders`);
+            const ordersRes = await fetch(`${BASE_URL}/api/orders`, {
+                headers: { "Authorization": "Bearer " + token }
+            });
             const orders = await ordersRes.json();
             const existingOrder = orders.find(order => order.customerName == customerName && order.orderStatus.toLowerCase() !== "completed");
 
@@ -83,7 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 await fetch(`${BASE_URL}/api/orders/${existingOrder.id}`, {
                     method: "PUT",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
                     body: JSON.stringify({
                         customerName,
                         orderDetails: updatedOrderDetails,
@@ -95,7 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Add new order
                 await fetch(`${BASE_URL}/api/orders`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
                     body: JSON.stringify({
                         customerName: String(tableSelect.value),
                         orderDetails,
@@ -113,14 +129,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load orders as before
     async function loadOrders() {
-        const response = await fetch(`${BASE_URL}/api/orders`);
+        const token = localStorage.getItem("token");
+        const response = await fetch(`${BASE_URL}/api/orders`, {
+            headers: { "Authorization": "Bearer " + token }
+        });
         const orders = await response.json();
         const tableBody = document.getElementById("order-table-body");
         tableBody.innerHTML = "";
         orders.forEach((order, index) => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td>${index + 1}</td> <!-- Serial number -->
+                <td>${index + 1}</td>
                 <td>${order.customerName}</td>
                 <td>${order.orderDetails}</td>
                 <td>${order.orderStatus}</td>
@@ -136,15 +155,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById("order-table-body").addEventListener("click", async function(e) {
         const id = e.target.dataset.id;
+        const token = localStorage.getItem("token");
         if (e.target.classList.contains("delete-order-btn")) {
             if (confirm("Are you sure you want to delete this order?")) {
-                await fetch(`/api/orders/${id}`, { method: "DELETE" });
+                await fetch(`${BASE_URL}/api/orders/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": "Bearer " + token }
+                });
                 loadOrders();
             }
         }
         if (e.target.classList.contains("edit-order-btn")) {
             // Fetch order details and fill the form for editing
-            const response = await fetch(`${BASE_URL}/api/orders/${id}`);
+            const response = await fetch(`${BASE_URL}/api/orders/${id}`, {
+                headers: { "Authorization": "Bearer " + token }
+            });
             if (response.ok) {
                 const order = await response.json();
                 document.getElementById('customer-name').value = order.customerName;

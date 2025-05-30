@@ -1,6 +1,7 @@
 const BASE_URL = location.hostname.includes("localhost")
     ? "http://localhost:8080"
     : "https://cafenest.onrender.com";
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('billingForm');
     const tableSelect = document.getElementById('customerName');
@@ -28,16 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
             totalAmountInput.value = '';
             return;
         }
-        const res = await fetch(`${BASE_URL}/api/orders`);
-        const orders = await res.json();
-        console.log("Orders:", orders, "Selected table:", tableNo);
-        orders.forEach(o => {
-            console.log(
-                "Order customerName:", o.customerName,
-                "orderStatus:", o.orderStatus,
-                "Match:", String(o.customerName).trim() === String(tableNo).trim()
-            );
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${BASE_URL}/api/orders`, {
+            headers: { "Authorization": "Bearer " + token }
         });
+        const orders = await res.json();
         const order = orders.reverse().find(o => 
             String(o.customerName).trim() === String(tableNo).trim() &&
             o.orderStatus &&
@@ -51,15 +47,18 @@ document.addEventListener('DOMContentLoaded', () => {
             orderDetailsInput.value = '';
             totalAmountInput.value = '';
             delete form.dataset.orderId;
-            alert(`No active order found for Table No ${tableNo}.`);
+            showToast(`No active order found for Table No ${tableNo}.`);
         }
     });
 
-    // Add this function to fetch and display bills
+    // Fetch and display bills
     async function loadBills() {
         const billsDiv = document.getElementById('bills');
         billsDiv.innerHTML = '';
-        const res = await fetch(`${BASE_URL}/api/bills`);
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${BASE_URL}/api/bills`, {
+            headers: { "Authorization": "Bearer " + token }
+        });
         const bills = await res.json();
         if (bills.length === 0) {
             billsDiv.innerHTML = "<p>No bills generated yet.</p>";
@@ -87,19 +86,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const orderId = form.dataset.orderId;
 
         if (!customerName || !orderDetails || !totalAmount) {
-            alert("Please select a table with an active order.");
+            showToast("Please select a table with an active order.");
             return;
         }
+
+        const token = localStorage.getItem("token");
 
         // Save the bill
         const billRes = await fetch(`${BASE_URL}/api/bills`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
             body: JSON.stringify({ customerName, orderDetails, totalAmount })
         });
         if (!billRes.ok) {
             const errorText = await billRes.text();
-            alert("Bill not generated: " + errorText);
+            showToast("Bill not generated: " + errorText);
             return;
         }
 
@@ -107,7 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (orderId) {
             await fetch(`${BASE_URL}/api/orders/${orderId}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
                 body: JSON.stringify({
                     customerName,
                     orderDetails,
@@ -117,16 +124,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        alert("Bill saved and order marked as completed!");
+        showToast("Bill generated and order completed successfully!");
         form.reset();
         orderDetailsInput.value = '';
         totalAmountInput.value = '';
         delete form.dataset.orderId;
-        await loadBills(); // <-- Add this line to refresh the bill list
+        await loadBills();
     });
 
     loadTables();
-    loadBills(); // <-- Load bills on page load
+    loadBills();
 });
 
 function printBill(button) {
@@ -141,15 +148,28 @@ function printBill(button) {
 
 async function deleteBill(id) {
     if (!confirm("Are you sure you want to delete this bill?")) return;
+    const token = localStorage.getItem("token");
     const res = await fetch(`${BASE_URL}/api/bills/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: { "Authorization": "Bearer " + token }
     });
     if (res.ok) {
-        alert("Bill deleted.");
+        showToast("Bill deleted.");
         loadBills();
     } else {
         const errorText = await res.text();
         console.error("Delete error:", errorText);
-        alert("Error deleting bill. Please try again.\n" + errorText);
+        showToast("Error deleting bill. Please try again.\n" + errorText);
     }
+}
+
+function showToast(message, duration = 3000) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.visibility = 'visible';
+    toast.style.opacity = '1';
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.visibility = 'hidden';
+    }, duration);
 }

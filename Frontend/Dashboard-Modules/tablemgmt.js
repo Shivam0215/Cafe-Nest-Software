@@ -1,6 +1,7 @@
 const BASE_URL = location.hostname.includes("localhost")
     ? "http://localhost:8080"
     : "https://cafenest.onrender.com";
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('tableForm');
     const tableNumberInput = document.getElementById('tableNumber');
@@ -9,7 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let editingId = null;
 
     async function fetchTables() {
-        const res = await fetch(`${BASE_URL}/api/tables`);
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${BASE_URL}/api/tables`, {
+            headers: { "Authorization": "Bearer " + token }
+        });
         const tables = await res.json();
         tableBody.innerHTML = "";
         tables.forEach(table => {
@@ -31,11 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const tableNumber = tableNumberInput.value;
         const seatingCapacity = seatingCapacityInput.value;
+        const token = localStorage.getItem("token");
 
         if (editingId) {
             await fetch(`${BASE_URL}/api/tables/${editingId}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
                 body: JSON.stringify({ tableNumber, seatingCapacity })
             });
             editingId = null;
@@ -43,7 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             await fetch(`${BASE_URL}/api/tables`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
                 body: JSON.stringify({ tableNumber, seatingCapacity })
             });
         }
@@ -53,8 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tableBody.addEventListener("click", async function(e) {
         const id = e.target.dataset.id;
+        const token = localStorage.getItem("token");
         if (e.target.classList.contains("delete-btn")) {
-            await fetch(`${BASE_URL}/api/tables/${id}`, { method: "DELETE" });
+            await fetch(`${BASE_URL}/api/tables/${id}`, {
+                method: "DELETE",
+                headers: { "Authorization": "Bearer " + token }
+            });
             fetchTables();
         }
         if (e.target.classList.contains("edit-btn")) {

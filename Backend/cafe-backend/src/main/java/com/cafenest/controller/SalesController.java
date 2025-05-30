@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/sales")
@@ -21,7 +24,14 @@ public class SalesController {
     private SalesRepository repo;
 
     @GetMapping
-    public List<Sale> getAll() { return repo.findAll(); }
+    public List<Map<String, Object>> getAll() {
+        return repo.findAll().stream().map(sale -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("date", sale.getDate());
+            map.put("totalAmount", sale.getSales()); // Map 'sales' to 'totalAmount'
+            return map;
+        }).collect(Collectors.toList());
+    }
 
     @PostMapping
     public Sale add(@RequestBody Sale s) { return repo.save(s); }

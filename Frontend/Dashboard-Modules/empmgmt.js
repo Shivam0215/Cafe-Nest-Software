@@ -1,6 +1,7 @@
 const BASE_URL = location.hostname.includes("localhost")
     ? "http://localhost:8080"
     : "https://cafenest.onrender.com";
+
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("employeeForm");
     const tableBody = document.getElementById("employee-table-body");
@@ -8,19 +9,22 @@ document.addEventListener("DOMContentLoaded", function () {
     let editingId = null;
 
     async function fetchEmployees() {
-    try {
-        const res = await fetch(`${BASE_URL}/api/employees`);
-        if (!res.ok) {
-            const errorText = await res.text();
-            throw new Error(`Error: ${res.status} - ${errorText}`);
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${BASE_URL}/api/employees`, {
+                headers: { "Authorization": "Bearer " + token }
+            });
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(`Error: ${res.status} - ${errorText}`);
+            }
+            employees = await res.json();
+            renderEmployees();
+        } catch (err) {
+            console.error("Failed to fetch employees:", err.message);
+            showToast("Could not load employee data. Please try again later.");
         }
-        employees = await res.json();
-        renderEmployees();
-    } catch (err) {
-        console.error("Failed to fetch employees:", err.message);
-        alert("Could not load employee data. Check console for details.");
     }
-}
 
     function renderEmployees() {
         tableBody.innerHTML = "";
@@ -45,12 +49,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const name = document.getElementById("name").value.trim();
         const position = document.getElementById("position").value.trim();
         const salary = parseFloat(document.getElementById("salary").value.trim());
+        const token = localStorage.getItem("token");
 
         if (editingId) {
             // Update employee
             await fetch(`${BASE_URL}/api/employees/${editingId}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
                 body: JSON.stringify({ name, position, salary })
             });
             editingId = null;
@@ -59,7 +67,10 @@ document.addEventListener("DOMContentLoaded", function () {
             // Add employee
             await fetch(`${BASE_URL}/api/employees`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
                 body: JSON.stringify({ name, position, salary })
             });
         }
@@ -70,8 +81,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     tableBody.addEventListener("click", async function (e) {
         const id = e.target.dataset.id;
+        const token = localStorage.getItem("token");
         if (e.target.classList.contains("delete-btn")) {
-            await fetch(`${BASE_URL}/api/employees/${id}`, { method: "DELETE" });
+            await fetch(`${BASE_URL}/api/employees/${id}`, {
+                method: "DELETE",
+                headers: { "Authorization": "Bearer " + token }
+            });
             fetchEmployees();
         }
         if (e.target.classList.contains("edit-btn")) {
@@ -83,6 +98,17 @@ document.addEventListener("DOMContentLoaded", function () {
             form.querySelector("button[type='submit']").textContent = "Update Employee";
         }
     });
+
+    function showToast(message, duration = 3000) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.style.visibility = 'visible';
+        toast.style.opacity = '1';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.visibility = 'hidden';
+        }, duration);
+    }
 
     fetchEmployees();
 });

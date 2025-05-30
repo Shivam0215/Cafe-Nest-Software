@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.ResponseEntity;
+import com.cafenest.security.JwtUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 // @CrossOrigin(origins = {"https://cafenest.shop", "https://www.cafenest.shop",  "https://cafenest.onrender.com"})
 @RestController
@@ -17,6 +21,9 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
@@ -31,7 +38,16 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         User user = userRepository.findByEmail(loginRequest.getEmail());
         if (user != null && passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return ResponseEntity.ok(user);
+            String token = jwtUtil.generateToken(user.getEmail());
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            // Only send safe user info (no password)
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("id", user.getId());
+            userInfo.put("name", user.getName());
+            userInfo.put("email", user.getEmail());
+            response.put("user", userInfo);
+            return ResponseEntity.ok(response);
         }
         return ResponseEntity.status(401).body("Invalid credentials");
     }

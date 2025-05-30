@@ -11,7 +11,7 @@ document.getElementById("login-form").addEventListener("submit", async function(
     const password = document.getElementById("password").value.trim();
 
     if (!email || !password) {
-        alert("Please enter both email and password.");
+        showToast("Please enter both email and password.");
         return;
     }
 
@@ -27,23 +27,31 @@ document.getElementById("login-form").addEventListener("submit", async function(
 
         if (response.ok) {
             const user = await response.json();
-            alert("Login successful!");
+            showToast("Login successful!");
             localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("user", JSON.stringify({
-                id: user.id,
-                name: user.name,
-                email: user.email
-            }));
+            localStorage.setItem("token", user.token);
+            localStorage.setItem("user", JSON.stringify(user.user));
             window.location.replace("Dashboard-Modules/index.html");
         } else {
             const errorText = await response.text();
-            alert("Login failed: " + errorText);
+            showToast("Login failed: " + errorText);
             console.error("Login failed:", errorText);
         }
     } catch (err) {
-        alert("An error occurred during login.");
+        showToast("An error occurred during login.");
         console.error("Network or server error:", err);
     } finally {
         submitBtn.disabled = false;
     }
 });
+
+function showToast(message, duration = 3000) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.visibility = 'visible';
+    toast.style.opacity = '1';
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.visibility = 'hidden';
+    }, duration);
+}

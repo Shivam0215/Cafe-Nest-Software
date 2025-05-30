@@ -1,9 +1,13 @@
 const BASE_URL = location.hostname.includes("localhost")
     ? "http://localhost:8080"
     : "https://cafenest.onrender.com";
+
 document.addEventListener('DOMContentLoaded', async () => {
-    // Fetch bills instead of sales
-    const response = await fetch(`${BASE_URL}/api/sales`);
+    const token = localStorage.getItem("token");
+    // Fetch sales data (bills)
+    const response = await fetch(`${BASE_URL}/api/sales`, {
+        headers: { "Authorization": "Bearer " + token }
+    });
     const bills = await response.json();
 
     const totalSalesElement = document.getElementById('totalSales');

@@ -11,7 +11,7 @@ document.getElementById("register-form").addEventListener("submit", async functi
     const password = document.getElementById("password").value.trim();
 
     if (!firstName || !lastName || !email || !password) {
-        alert("Please fill in all required fields.");
+        showToast("Please fill in all required fields.");
         return;
     }
 
@@ -19,7 +19,6 @@ document.getElementById("register-form").addEventListener("submit", async functi
         const response = await fetch(apiUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-              credentials: "include", 
             body: JSON.stringify({ name, cafeName, email, password })
         });
 
@@ -30,9 +29,20 @@ document.getElementById("register-form").addEventListener("submit", async functi
 
         const data = await response.json();
         console.log(data);
-        alert("Registration successful! Please log in.");
+        showToast("Registration successful! Please log in.");
         window.location.href = "login.html";
     } catch (error) {
-        alert("Registration failed: " + error.message);
+        showToast("Registration failed: " + error.message);
     }
 });
+
+function showToast(message, duration = 3000) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.visibility = 'visible';
+    toast.style.opacity = '1';
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.visibility = 'hidden';
+    }, duration);
+}

@@ -17,4 +17,9 @@ public class User {
     private String email;
     private String password;
     private String cafeName;
+
+    // Add fields for profilePhoto and companyName if not present
+    @Column(length = 100000)
+    private String profilePhoto;
+    private String companyName;
 }
