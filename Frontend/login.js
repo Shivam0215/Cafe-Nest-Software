@@ -27,6 +27,7 @@ document.getElementById("login-form").addEventListener("submit", async function(
 
         if (response.ok) {
             const user = await response.json();
+            console.log(user);
             showToast("Login successful!");
             localStorage.setItem("isLoggedIn", "true");
             localStorage.setItem("token", user.token);
