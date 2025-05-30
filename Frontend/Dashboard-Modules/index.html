@@ -113,17 +113,19 @@
     <div id="toast" style="visibility:hidden; min-width:200px; background:#333; color:#fff; text-align:center; border-radius:4px; padding:16px; position:fixed; z-index:9999; left:50%; bottom:30px; transform:translateX(-50%); font-size:17px; transition:visibility 0s, opacity 0.5s linear; opacity:0;"></div>
     <script>
         // Redirect to login if not authenticated
-        if (!localStorage.getItem('token') || !localStorage.getItem('user')) {
-    window.location.replace("../login.html");
-}
-        document.addEventListener('DOMContentLoaded', function() {
-            const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) return;
-    const token = localStorage.getItem("token");
+       document.addEventListener('DOMContentLoaded', function() {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
 
-fetch(`https://cafenest.onrender.com/api/profile/${user.id}`, {
-    headers: { "Authorization": "Bearer " + token }
-})
+    if (!token || !user) {
+        window.location.replace("../login.html");
+        return;
+    }
+
+    // Now make profile fetch with token
+    fetch(`https://cafenest.onrender.com/api/profile/${user.id}`, {
+        headers: { "Authorization": "Bearer " + token }
+    })
 .then(res => {
     if (res.status === 401) {
         signOut();
