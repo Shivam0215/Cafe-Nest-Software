@@ -13,6 +13,7 @@ public class Billing {
     private String orderDetails;
     private Double totalAmount;
     private LocalDate date; // Add this line
+    private Long userId; // Add this field
 
     // Getters and setters
     public Long getId() { return id; }
@@ -29,5 +30,12 @@ public class Billing {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

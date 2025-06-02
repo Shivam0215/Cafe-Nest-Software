@@ -1,6 +1,10 @@
 package com.cafenest.repository;
 
-import com.cafenest.model.TableEntity;
+import com.cafenest.model.Table;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TableRepository extends JpaRepository<TableEntity, Long> {}
+import java.util.List;
+
+public interface TableRepository extends JpaRepository<Table, Long> {
+    List<Table> findByUserId(Long userId); // Add this method
+}

@@ -1,6 +1,7 @@
 package com.cafenest.security;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -8,9 +9,16 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.cafenest.model.User;
+import com.cafenest.repository.UserRepository;
 
 @Component
 public class JwtUtil {
+
+    @Autowired
+    private UserRepository userRepository;
 
     // Load secret from application.properties or application.yml
     @Value("${jwt.secret}")
@@ -87,5 +95,26 @@ public class JwtUtil {
             System.out.println("Unknown error validating token: " + e.getMessage());
         }
         return false;
+    }
+
+    public User getUserFromRequest(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header == null || !header.startsWith("Bearer ")) {
+            throw new RuntimeException("Missing or invalid Authorization header");
+        }
+        String token = header.substring(7);
+        String email = extractUsername(token); // You must have this method in JwtUtil
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    // Example extractUsername method
+    public String extractUsername(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 }

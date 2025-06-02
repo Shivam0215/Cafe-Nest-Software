@@ -1,6 +1,7 @@
 package com.cafenest.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
@@ -17,4 +18,8 @@ public class Order {
     private String orderDetails;
     private String orderStatus;
     private double totalAmount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

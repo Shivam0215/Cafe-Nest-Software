@@ -1,10 +1,13 @@
 package com.cafenest.controller;
 
-import com.cafenest.model.TableEntity;
+import com.cafenest.model.Table;
+import com.cafenest.model.User;
 import com.cafenest.repository.TableRepository;
+import com.cafenest.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,27 +22,47 @@ import java.util.Optional;
 })
 public class TableController {
     @Autowired
-    private TableRepository repo;
+    private TableRepository tableRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @GetMapping
-    public List<TableEntity> getAll() { return repo.findAll(); }
+    public List<Table> getTables(HttpServletRequest request) {
+        User user = jwtUtil.getUserFromRequest(request);
+        return tableRepository.findByUserId(user.getId());
+    }
 
     @PostMapping
-    public TableEntity add(@RequestBody TableEntity t) { return repo.save(t); }
+    public Table createTable(@RequestBody Table table, HttpServletRequest request) {
+        User user = jwtUtil.getUserFromRequest(request);
+        table.setUserId(user.getId());
+        return tableRepository.save(table);
+    }
+
+    @PutMapping("/{id}")
+    public Table updateTable(@PathVariable Long id, @RequestBody Table tableDetails, HttpServletRequest request) {
+        User user = jwtUtil.getUserFromRequest(request);
+        Optional<Table> optional = tableRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new RuntimeException("Table not found");
+        }
+        Table existing = optional.get();
+        if (!existing.getUserId().equals(user.getId())) {
+            throw new RuntimeException("Not authorized");
+        }
+        if (tableDetails.getTableNumber() != null) existing.setTableNumber(tableDetails.getTableNumber());
+        if (tableDetails.getSeatingCapacity() != null) existing.setSeatingCapacity(tableDetails.getSeatingCapacity());
+        return tableRepository.save(existing);
+    }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) { repo.deleteById(id); }
-
-    // ADD THIS FOR UPDATE SUPPORT
-    @PutMapping("/{id}")
-    public TableEntity update(@PathVariable Long id, @RequestBody TableEntity t) {
-        Optional<TableEntity> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            TableEntity existing = optional.get();
-            if (t.getTableNumber() != null) existing.setTableNumber(t.getTableNumber());
-            if (t.getSeatingCapacity() != null) existing.setSeatingCapacity(t.getSeatingCapacity());
-            return repo.save(existing);
+    public void deleteTable(@PathVariable Long id, HttpServletRequest request) {
+        User user = jwtUtil.getUserFromRequest(request);
+        Optional<Table> optional = tableRepository.findById(id);
+        if (!optional.isPresent() || !optional.get().getUserId().equals(user.getId())) {
+            throw new RuntimeException("Not found or not authorized");
         }
-        throw new RuntimeException("Table not found");
+        tableRepository.deleteById(id);
     }
 }

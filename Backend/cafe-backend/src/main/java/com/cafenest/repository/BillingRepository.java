@@ -3,4 +3,8 @@ package com.cafenest.repository;
 import com.cafenest.model.Billing;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BillingRepository extends JpaRepository<Billing, Long> {}
+import java.util.List;
+
+public interface BillingRepository extends JpaRepository<Billing, Long> {
+    List<Billing> findByUserId(Long userId); // Add this method
+}

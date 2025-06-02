@@ -11,6 +11,7 @@ import com.cafenest.security.JwtUtil;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 // @CrossOrigin(origins = {"https://cafenest.shop", "https://www.cafenest.shop",  "https://cafenest.onrender.com"})
 @RestController
@@ -37,8 +38,9 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            User user = userRepository.findByEmail(loginRequest.getEmail());
-            if (user != null && passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            Optional<User> optionalUser = userRepository.findByEmail(loginRequest.getEmail());
+            if (optionalUser.isPresent() && passwordEncoder.matches(loginRequest.getPassword(), optionalUser.get().getPassword())) {
+                User user = optionalUser.get();
                 String token = jwtUtil.generateToken(user.getEmail());
                 Map<String, Object> response = new HashMap<>();
                 response.put("token", token);
