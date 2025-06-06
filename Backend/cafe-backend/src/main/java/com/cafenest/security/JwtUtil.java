@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.cafenest.model.User;
 import com.cafenest.repository.UserRepository;
@@ -60,14 +62,23 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    public String extractRole(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("role", String.class);
+    public List<String> extractRoles(String token) {
+    Claims claims = Jwts.parserBuilder()
+            .setSigningKey(getSigningKey())
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+    Object roles = claims.get("roles"); // cast appropriately
+    if (roles instanceof List<?>) {
+        return ((List<?>) roles).stream()
+            .map(Object::toString)
+            .collect(Collectors.toList());
     }
+    // fallback
+    return List.of("USER");
+}
+
+
 
     public boolean validateToken(String token) {
         try {
@@ -92,7 +103,7 @@ public class JwtUtil {
         return false;
     }
 
-   public User getUserFromRequest(HttpServletRequest request) {
+   public User getUserFromRequest(jakarta.servlet.http.HttpServletRequest request) {
     try {
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {

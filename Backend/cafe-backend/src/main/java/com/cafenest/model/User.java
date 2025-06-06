@@ -1,16 +1,10 @@
 package com.cafenest.model;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
@@ -19,23 +13,31 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-private String cafeName;
 
-// Add fields for profilePhoto and companyName if not present
-@Column(length = 100000)
-private String profilePhoto;
-private String companyName;
+    private String cafeName;
 
-@NotBlank
-@Email
-private String email;
+    // Consider using a @Lob for potentially large data such as profile photo if you store base64 or blob
+    @Lob
+    @Column(length = 100000)
+    private String profilePhoto;
 
-@NotBlank
-@Size(min = 8, message = "Password must be at least 8 characters")
-private String password;
+    private String companyName;
+
+    @NotBlank
+    @Email
+    @Column(unique = true)
+    private String email;
+
+    @NotBlank
+    @Size(min = 8, message = "Password must be at least 8 characters")
+    private String password;
+
+    private String role = "USER";  // Default role field, useful for authorization
+
 }

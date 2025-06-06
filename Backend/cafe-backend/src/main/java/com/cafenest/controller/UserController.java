@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.ResponseEntity;
 import com.cafenest.security.JwtUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -65,5 +67,26 @@ public class UserController {
             return ResponseEntity.status(500).body("An error occurred. Please try again later.");
         }
     }
+    @PutMapping("/profile")
+public ResponseEntity<?> updateProfile(@RequestBody User updatedUser, HttpServletRequest request) {
+    User currentUser = jwtUtil.getUserFromRequest(request);
+    if (currentUser == null) {
+        return ResponseEntity.status(401).body("Unauthorized");
+    }
+
+    // Update allowed fields only
+    currentUser.setName(updatedUser.getName());
+    currentUser.setCafeName(updatedUser.getCafeName());
+    currentUser.setProfilePhoto(updatedUser.getProfilePhoto());
+    currentUser.setCompanyName(updatedUser.getCompanyName());
+
+    userRepository.save(currentUser);
+
+    // Exclude password before sending
+    currentUser.setPassword(null);
+
+    return ResponseEntity.ok(currentUser);
+}
+
 }
 

@@ -75,8 +75,20 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
 </dependency>
-		
-	
+		<!-- Jakarta Validation API -->
+<dependency>
+    <groupId>jakarta.validation</groupId>
+    <artifactId>jakarta.validation-api</artifactId>
+    <version>3.0.2</version> <!-- or latest version -->
+</dependency>
+
+<!-- Also add Hibernate Validator (implementation) -->
+<dependency>
+    <groupId>org.hibernate.validator</groupId>
+    <artifactId>hibernate-validator</artifactId>
+    <version>8.0.0.Final</version> <!-- or latest -->
+</dependency>
+
    <dependency>
      <groupId>javax</groupId>
      <artifactId>javaee-api</artifactId>

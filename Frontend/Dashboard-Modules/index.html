@@ -31,9 +31,9 @@
                     <br>
                     <img id="profile-photo-preview" src="assets/default-profile.png" alt="Profile Photo" style="width:70px;height:70px;border-radius:50%;margin-top:10px;object-fit:cover;border:1px solid #ccc;">
                 </div>
-                <div class="company-name">
-                    <label for="company-name">Company Name:</label>
-                    <input type="text" id="company-name" name="company-name" placeholder="Enter company name">
+                <div class="cafe-name">
+                    <label for="cafe-name">Cafe Name:</label>
+                    <input type="text" id="cafe-name" name="cafe-name" placeholder="Enter cafe name">
                 </div>
             </div>
             <button onclick="saveProfile()" class="save-btn">Save Changes</button>
@@ -142,9 +142,9 @@
         if (profilePhotoPreview) {
             profilePhotoPreview.src = profile.profilePhoto || 'assets/profile.png';
         }
-        const companyNameInput = document.getElementById('company-name');
-        if (companyNameInput) {
-            companyNameInput.value = profile.companyName || '';
+        const cafeNameInput = document.getElementById('cafe-name');
+        if (cafeNameInput) {
+            cafeNameInput.value = profile.cafeName || '';
         }
       });
             }); 
@@ -157,7 +157,7 @@
                 popup.style.display = (popup.style.display === 'none' || popup.style.display === '') ? 'block' : 'none';
             }
             function saveProfile() {
-    const companyName = document.getElementById('company-name').value;
+    const cafeName = document.getElementById('cafe-name').value;
     const profilePhoto = document.getElementById('profile-photo-preview').src;
     const user = JSON.parse(localStorage.getItem('user'));
     const token = localStorage.getItem("token");
@@ -187,8 +187,6 @@
             function signOut() {
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('user');
-                // localStorage.removeItem('profilePhoto'); // Not needed anymore
-                // localStorage.removeItem('companyName');  // Not needed anymore
                 window.location.replace("../login.html");
             }
             function previewProfilePhoto(event) {
@@ -198,14 +196,14 @@
         const reader = new FileReader();
         reader.onload = function(e) {
             preview.src = e.target.result;
-            // No localStorage here!
+
         };
         reader.readAsDataURL(file);
     } else {
         preview.src = "assets/profile.png";
     }
 }
-            // Cropper.js related functions
+        
             let cropper;
 function openCropper(event) {
     const file = event.target.files[0];
@@ -216,7 +214,7 @@ function openCropper(event) {
         const cropperImage = document.getElementById('cropper-image');
         cropperImage.src = e.target.result;
         cropperModal.style.display = 'flex';
-        // Destroy previous cropper if exists
+      
         if (cropper) cropper.destroy();
         cropper = new Cropper(cropperImage, {
             aspectRatio: 1,
@@ -240,7 +238,7 @@ function cropImage() {
             imageSmoothingQuality: 'high'
         });
         const croppedDataUrl = canvas.toDataURL('image/png');
-        // Set preview only (do not save to localStorage)
+   
         document.getElementById('profile-photo-preview').src = croppedDataUrl;
         const dashboardProfilePhoto = document.getElementById('dashboard-profile-photo');
         if (dashboardProfilePhoto) dashboardProfilePhoto.src = croppedDataUrl;
