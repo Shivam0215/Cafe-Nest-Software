@@ -27,7 +27,6 @@ document.getElementById("login-form").addEventListener("submit", async function(
 
         if (response.ok) {
             const user = await response.json();
-            console.log(user);
             showToast("Login successful!");
             localStorage.setItem("isLoggedIn", "true");
             localStorage.setItem("token", user.token);
@@ -35,15 +34,12 @@ document.getElementById("login-form").addEventListener("submit", async function(
             window.location.replace("Dashboard-Modules/index.html");
         } else {
             const errorText = await response.text();
-            showToast("Login failed: " + errorText);
-            console.error("Login failed:", errorText);
+            showToast(errorText || "Invalid email or password.");
         }
     } catch (err) {
-        showToast("An error occurred during login.");
-        console.error("Network or server error:", err);
-    } finally {
-        submitBtn.disabled = false;
+        showToast("Network error. Please try again.");
     }
+    submitBtn.disabled = false;
 });
 
 function showToast(message, duration = 3000) {

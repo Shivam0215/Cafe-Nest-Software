@@ -7,12 +7,15 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
+
 import com.cafenest.model.User;
 import com.cafenest.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Component
 public class JwtUtil {
@@ -20,19 +23,15 @@ public class JwtUtil {
     @Autowired
     private UserRepository userRepository;
 
-    // Load secret from application.properties or application.yml
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    // Token validity: 24 hours
-    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;
+    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 24 hours
 
-    // Create a signing key using HS512 algorithm
     private SecretKey getSigningKey() {
         return new SecretKeySpec(SECRET_KEY.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS512.getJcaName());
     }
 
-    // Generate JWT with subject (email)
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
@@ -42,7 +41,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // (Optional) Generate JWT with email + role
     public String generateToken(String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
@@ -53,7 +51,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Extract email from token
     public String extractEmail(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -63,7 +60,6 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    // (Optional) Extract role from token
     public String extractRole(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -73,7 +69,6 @@ public class JwtUtil {
                 .get("role", String.class);
     }
 
-    // Validate token and handle errors gracefully
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -97,24 +92,23 @@ public class JwtUtil {
         return false;
     }
 
-    public User getUserFromRequest(HttpServletRequest request) {
+   public User getUserFromRequest(HttpServletRequest request) {
+    try {
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
-            throw new RuntimeException("Missing or invalid Authorization header");
+            return null;
         }
-        String token = header.substring(7);
-        String email = extractUsername(token); // You must have this method in JwtUtil
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
 
-    // Example extractUsername method
-    public String extractUsername(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        String token = header.substring(7);
+        if (!validateToken(token)) {
+            return null;
+        }
+
+        String email = extractEmail(token);
+        return userRepository.findByEmail(email).orElse(null);
+
+    } catch (Exception e) {
+        System.out.println("Error in getUserFromRequest: " + e.getMessage());
+        return null;
     }
-}
+}}

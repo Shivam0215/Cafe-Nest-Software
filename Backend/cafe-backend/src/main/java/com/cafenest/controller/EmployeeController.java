@@ -15,11 +15,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/employees")
 @CrossOrigin(origins = {
-    "https://cafenest.shop",
-    "https://www.cafenest.shop",
-    "https://cafenest.onrender.com",
-    "http://localhost:3000",
-    "http://localhost:5500"
+        "https://cafenest.shop",
+        "https://www.cafenest.shop",
+        "https://cafenest.onrender.com",
+        "http://localhost:3000",
+        "http://localhost:5500"
 })
 public class EmployeeController {
 
@@ -30,47 +30,68 @@ public class EmployeeController {
     private JwtUtil jwtUtil;
 
     @GetMapping
-    public List<Employee> getEmployees(HttpServletRequest request) {
+    public ResponseEntity<?> getEmployees(HttpServletRequest request) {
         User user = jwtUtil.getUserFromRequest(request);
-        return employeeRepository.findByUserId(user.getId());
+        if (user == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+        List<Employee> employees = employeeRepository.findByUserId(user.getId());
+        return ResponseEntity.ok(employees);
     }
 
     @PostMapping
-    public Employee addEmployee(@RequestBody Employee employee, HttpServletRequest request) {
+    public ResponseEntity<?> addEmployee(@RequestBody Employee employee, HttpServletRequest request) {
         User user = jwtUtil.getUserFromRequest(request);
+        if (user == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
         employee.setUserId(user.getId());
-        return employeeRepository.save(employee);
+        Employee saved = employeeRepository.save(employee);
+        return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee employeeDetails, HttpServletRequest request) {
+    public ResponseEntity<?> updateEmployee(@PathVariable Long id, @RequestBody Employee employeeDetails, HttpServletRequest request) {
         User user = jwtUtil.getUserFromRequest(request);
+        if (user == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         if (!optionalEmployee.isPresent()) {
             return ResponseEntity.notFound().build();
         }
+
         Employee employee = optionalEmployee.get();
         if (!employee.getUserId().equals(user.getId())) {
-            return ResponseEntity.status(403).build();
+            return ResponseEntity.status(403).body("Forbidden");
         }
+
         employee.setName(employeeDetails.getName());
         employee.setPosition(employeeDetails.getPosition());
         employee.setSalary(employeeDetails.getSalary());
-        return ResponseEntity.ok(employeeRepository.save(employee));
+        Employee updated = employeeRepository.save(employee);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id, HttpServletRequest request) {
         User user = jwtUtil.getUserFromRequest(request);
+        if (user == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         if (!optionalEmployee.isPresent()) {
             return ResponseEntity.notFound().build();
         }
+
         Employee employee = optionalEmployee.get();
         if (!employee.getUserId().equals(user.getId())) {
-            return ResponseEntity.status(403).build();
+            return ResponseEntity.status(403).body("Forbidden");
         }
+
         employeeRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("Deleted successfully");
     }
 }

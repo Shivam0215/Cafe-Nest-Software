@@ -12,6 +12,9 @@ import com.cafenest.security.JwtUtil;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.validation.BindingResult;
+
+import javax.validation.Valid;
 
 // @CrossOrigin(origins = {"https://cafenest.shop", "https://www.cafenest.shop",  "https://cafenest.onrender.com"})
 @RestController
@@ -27,8 +30,12 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        if (userRepository.findByEmail(user.getEmail()) != null) {
+    public ResponseEntity<?> register(@Valid @RequestBody User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest().body(result.getAllErrors().get(0).getDefaultMessage());
+        }
+        Optional<User> existing = userRepository.findByEmail(user.getEmail());
+        if (existing.isPresent()) {
             return ResponseEntity.status(400).body("Email already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
