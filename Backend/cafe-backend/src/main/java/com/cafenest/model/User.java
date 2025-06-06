@@ -39,5 +39,8 @@ public class User {
     private String password;
 
     private String role = "USER";  // Default role field, useful for authorization
+    private boolean enabled = false;  // false until email verified
+
+    private String verificationToken; // store token temporarily
 
 }
