@@ -47,43 +47,44 @@ public ResponseEntity<?> register(@Valid @RequestBody User user, BindingResult r
     if (existing.isPresent()) {
         return ResponseEntity.status(400).body("Email already exists");
     }
-
     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    user.setEnabled(false);
+
+    // Generate verification token
     String token = UUID.randomUUID().toString();
     user.setVerificationToken(token);
+    user.setVerified(false);
+
     userRepository.save(user);
 
+    // Send verification email
     emailService.sendVerificationEmail(user.getEmail(), token);
 
-    return ResponseEntity.ok("Registration successful. Please verify your email.");
+    return ResponseEntity.ok("User registered successfully. Please check your email to verify your account.");
 }
-
 
     @PostMapping("/login")
 public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
     Optional<User> optionalUser = userRepository.findByEmail(loginRequest.getEmail());
     if (optionalUser.isPresent()) {
         User user = optionalUser.get();
-        if (!user.isEnabled()) {
+        if (!user.isVerified()) {
             return ResponseEntity.status(403).body("Please verify your email before logging in.");
         }
         if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
+            String token = jwtUtil.generateToken(user.getEmail());
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
-
             Map<String, Object> userInfo = new HashMap<>();
             userInfo.put("id", user.getId());
             userInfo.put("name", user.getName());
             userInfo.put("email", user.getEmail());
             response.put("user", userInfo);
-
             return ResponseEntity.ok(response);
         }
     }
-    return ResponseEntity.status(401).body("Invalid credentials.");
+    return ResponseEntity.status(401).body("Invalid credentials");
 }
+
 
     @PutMapping("/profile")
 public ResponseEntity<?> updateProfile(@RequestBody User updatedUser, HttpServletRequest request) {
@@ -106,17 +107,19 @@ public ResponseEntity<?> updateProfile(@RequestBody User updatedUser, HttpServle
     return ResponseEntity.ok(currentUser);
 }
 @GetMapping("/verify")
-public ResponseEntity<?> verifyEmail(@RequestParam String token) {
+public ResponseEntity<?> verifyUser(@RequestParam("token") String token) {
     Optional<User> userOpt = userRepository.findByVerificationToken(token);
     if (userOpt.isPresent()) {
         User user = userOpt.get();
-        user.setEnabled(true);
-        user.setVerificationToken(null);
+        user.setVerified(true);
+        user.setVerificationToken(null); // Clear token once verified
         userRepository.save(user);
-        return ResponseEntity.ok("Email verified successfully. You can now log in.");
+        return ResponseEntity.ok("Email verified successfully. You can now login.");
+    } else {
+        return ResponseEntity.status(400).body("Invalid verification token.");
     }
-    return ResponseEntity.badRequest().body("Invalid or expired verification link.");
 }
+
 
 
 }

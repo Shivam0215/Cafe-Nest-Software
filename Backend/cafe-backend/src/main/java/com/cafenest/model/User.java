@@ -40,7 +40,10 @@ public class User {
 
     private String role = "USER";  // Default role field, useful for authorization
     private boolean enabled = false;  // false until email verified
+private boolean isVerified = false;
 
-    private String verificationToken; // store token temporarily
+@Column(unique = true)
+private String verificationToken;
+
 
 }
